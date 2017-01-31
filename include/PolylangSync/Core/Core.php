@@ -1,6 +1,6 @@
 <?php
 
-namespace AcfPolylangSync\Core;
+namespace PolylangSync\Core;
 
 class Core extends Singleton {
 
@@ -12,9 +12,9 @@ class Core extends Singleton {
 		add_action( 'init' , array( $this , 'init' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
 
-		register_activation_hook( ACF_POLYLANG_SYNC_FILE, array( __CLASS__ , 'activate' ) );
-		register_deactivation_hook( ACF_POLYLANG_SYNC_FILE, array( __CLASS__ , 'deactivate' ) );
-		register_uninstall_hook( ACF_POLYLANG_SYNC_FILE, array( __CLASS__ , 'uninstall' ) );
+		register_activation_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'activate' ) );
+		register_deactivation_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'deactivate' ) );
+		register_uninstall_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'uninstall' ) );
 		
 		parent::__construct();
 	}
@@ -34,7 +34,7 @@ class Core extends Singleton {
 	 *  @action plugins_loaded
 	 */
 	public function load_textdomain() {
-		load_plugin_textdomain( 'acf-polylang-sync' , false, ACF_POLYLANG_SYNC_DIRECTORY . '/languages/' );
+		load_plugin_textdomain( 'polylang-sync' , false, POLYLANG_SYNC_DIRECTORY . '/languages/' );
 	}
 
 	/**

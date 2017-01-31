@@ -1,15 +1,15 @@
 <?php
 
 /*
-Plugin Name: ACF Polylang Sync
+Plugin Name: Polylang Sync
 Plugin URI: http://wordpress.org/
-Description: Enter description here.
+Description: Keep Menus, ACF-Fields and more in Sync on your Polylang-Powered multilingual WordPress-Site.
 Author: Jörn Lund
 Version: 1.0.0
 Author URI: 
 License: GPL3
 
-Text Domain: acf-polylang-sync
+Text Domain: polylang-sync
 Domain Path: /languages/
 */
 
@@ -36,12 +36,12 @@ Command line args were: `"ACF Polylang Sync" admin+css+js settings_page+css+js g
 */
 
 
-namespace AcfPolylangSync;
+namespace PolylangSync;
 
-define( 'ACF_POLYLANG_SYNC_FILE', __FILE__ );
-define( 'ACF_POLYLANG_SYNC_DIRECTORY', plugin_dir_path(__FILE__) );
+define( 'POLYLANG_SYNC_FILE', __FILE__ );
+define( 'POLYLANG_SYNC_DIRECTORY', plugin_dir_path(__FILE__) );
 
-require_once ACF_POLYLANG_SYNC_DIRECTORY . 'include/vendor/autoload.php';
+require_once POLYLANG_SYNC_DIRECTORY . 'include/vendor/autoload.php';
 
 Core\Core::instance();
 
@@ -51,8 +51,8 @@ Core\Core::instance();
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
 
-/*
 	Admin\Admin::instance();
+/*
 	Admin\Tools::instance();
 	Admin\Settings::instance();
 

@@ -1,4 +1,4 @@
-=== ACF Polylang Sync ===
+=== Polylang Sync ===
 Contributors: #### Your wordpress.org Username ####
 Donate link: #### donate link ####
 Tags: #### donate link ####
@@ -24,11 +24,11 @@ Follow the standard [WordPress plugin installation procedere](http://codex.wordp
 
 = I found a bug. Where should I post it? =
 
-You can can either go into the Support forum, or in the [ACF Polylang Sync Repository](https://github.com/mcguffin/acf-polylang-sync).
+You can can either go into the Support forum, or in the [Polylang Sync Repository](https://github.com/mcguffin/polylang-sync).
 
 = I'd like to suggest a feature. Where should I post it? =
 
-I personally prefer GitHub. The plugin code is here: [GitHub](https://github.com/mcguffin/acf-polylang-sync)
+I personally prefer GitHub. The plugin code is here: [GitHub](https://github.com/mcguffin/polylang-sync)
 (See above as well.)
 
 = I want to use the latest files. How can I do this? =
@@ -39,13 +39,13 @@ Use the GitHub Repo rather than the WordPress Plugin. Do as follows:
 
 2. in the console cd into Your 'wp-content/plugins' directory
 
-3. type `git clone git@github.com:mcguffin/acf-polylang-sync.git`
+3. type `git clone git@github.com:mcguffin/polylang-sync.git`
 
 4. If you want to update to the latest files (be careful, might be untested with your WP-Version) type `git pull`.
 
 = I found a bug and fixed it. How can I let You know? =
 
-Either post it on the [GitHub-repo](https://github.com/mcguffin/acf-polylang-sync) or—if you cloned the repository—send me a pull request.
+Either post it on the [GitHub-repo](https://github.com/mcguffin/polylang-sync) or—if you cloned the repository—send me a pull request.
 
 = Will you accept translations? =
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace AcfPolylangSync;
+namespace PolylangSync;
 
 function __autoload( $class ) {
-	if ( strpos( $class, 'AcfPolylangSync\\' ) === false ) {
+	if ( strpos( $class, 'PolylangSync\\' ) === false ) {
 		// not our plugin.
 		return;
 	}
 	$ds = DIRECTORY_SEPARATOR;
-	$file = ACF_POLYLANG_SYNC_DIRECTORY . 'include' . $ds . str_replace( '\\', $ds, $class ) . '.php';
+	$file = POLYLANG_SYNC_DIRECTORY . 'include' . $ds . str_replace( '\\', $ds, $class ) . '.php';
 
 	if ( file_exists( $file ) ) {
 		require_once $file;
@@ -18,4 +18,4 @@ function __autoload( $class ) {
 }
 
 
-spl_autoload_register( 'AcfPolylangSync\__autoload' );
+spl_autoload_register( 'PolylangSync\__autoload' );

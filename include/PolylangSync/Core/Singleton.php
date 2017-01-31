@@ -1,6 +1,6 @@
 <?php
 
-namespace AcfPolylangSync\Core;
+namespace PolylangSync\Core;
 
 abstract class Singleton {
 
