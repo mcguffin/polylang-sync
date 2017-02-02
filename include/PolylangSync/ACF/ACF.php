@@ -17,6 +17,8 @@ class ACF extends Core\Singleton {
 		foreach ( $this->get_supported_fields() as $type ) {
 			add_action( "acf/render_field_settings/type={$type}" , array( $this , 'render_acf_sync_settings' ) );
 		}
+
+		$this->sync = Sync::instance();
 	}
 
 	/**

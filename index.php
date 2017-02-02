@@ -52,6 +52,11 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
 
 	Admin\Admin::instance();
+	
+	Settings\SettingsPagePolylangSync::instance();
+
+	Taxonomy\Taxonomy::instance();
+
 /*
 	Admin\Tools::instance();
 	Admin\Settings::instance();

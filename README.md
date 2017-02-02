@@ -7,6 +7,7 @@ Keep [ACF-Pro](https://www.advancedcustomfields.com) Fields in Sync on your
  - Requires PHP 5.3+, [ACF-Pro 5+](https://www.advancedcustomfields.com/pro) and [Polylang](http://polylang.wordpress.com)
  - Developed and Tested With WP 4.7.2, Polylang 2.1, ACF Pro 5.5.5
 
+
 Features:
 ---------
  - Synchronize almost every ACF-Field between translations
@@ -15,5 +16,7 @@ Features:
  - If Media Support enabled in Polylang the plugin will auto-create media translations if 
    they don't exist.
 
+
 Planned Features:
 -----------------
+ - [ ] Sync Nav-Menus

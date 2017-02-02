@@ -3,6 +3,7 @@
 namespace PolylangSync\Admin;
 use PolylangSync\Core;
 use PolylangSync\ACF;
+use PolylangSync\Menu;
 
 
 class Admin extends Core\Singleton {
@@ -46,10 +47,11 @@ class Admin extends Core\Singleton {
 	 */
 	function setup() {
 		if ( function_exists( 'PLL' ) ) {
+			
+			$this->menu_edit = Menu\Edit::instance();
 
 			if ( class_exists( 'acf' ) && function_exists( 'acf_get_field_groups' ) ) {
 				$this->acf		= ACF\ACF::instance();
-				$this->acf_sync	= ACF\Sync::instance();
 			}
 
 		} else if ( class_exists( 'acf' ) && current_user_can( 'activate_plugins' ) ) {

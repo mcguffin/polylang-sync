@@ -10,6 +10,7 @@ class Core extends Singleton {
 	protected function __construct() {
 		add_action( 'plugins_loaded' , array( $this , 'load_textdomain' ) );
 		add_action( 'init' , array( $this , 'init' ) );
+		add_action( 'init' , array( $this , 'register_assets' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this , 'wp_enqueue_style' ) );
 
 		register_activation_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'activate' ) );
@@ -25,6 +26,16 @@ class Core extends Singleton {
 	 *	@action wp_enqueue_scripts
 	 */
 	public function wp_enqueue_style() {
+	}
+
+
+	/**
+	 *	Register Assets
+	 *
+	 *	@action init
+	 */
+	public function register_assets() {
+		wp_register_script( 'jquery-unserialize', $this->get_asset_url( 'js/jquery.unserialize.js' ) );
 	}
 
 	
@@ -45,6 +56,18 @@ class Core extends Singleton {
 	public function init() {
 	}
 
+	public function get_pll_languages() {
+		$langs	= array();
+		$terms	= get_terms( array(
+			'taxonomy'		=> 'language',
+			'hide_empty'	=> false,
+		) );
+		foreach ( $terms as $term ) {
+			$langs[] = $term->slug;
+		}
+		return $langs;
+	}
+
 	/**
 	 *	Get asset url for this plugin
 	 *
@@ -52,7 +75,7 @@ class Core extends Singleton {
 	 *	@return wp_enqueue_editor
 	 */
 	public function get_asset_url( $asset ) {
-		return plugins_url( $asset, PLUGIN_FILE );
+		return plugins_url( $asset, POLYLANG_SYNC_FILE );
 	}
 
 

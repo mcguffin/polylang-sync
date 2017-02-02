@@ -18,7 +18,6 @@ class Sync extends Core\Singleton {
 	protected function __construct() {
 
 		$this->core	= Core\Core::instance();
-		$this->acf	= ACF::instance();
 
 		add_action( 'init' , array( &$this , 'init' ) );
 
@@ -59,7 +58,6 @@ class Sync extends Core\Singleton {
 	 */
 	public function pll_save_post( $source_post_id, $source_post, $translation_group ) {
 		$this->update_fields( $this->sync_scf_fields, $source_post_id, $translation_group );
-		exit();
 	}
 	
 	
@@ -177,16 +175,17 @@ class Sync extends Core\Singleton {
 		$translated_posts	= array();
 
 		foreach ( $translation_group as $lang_code => $post_id ) {
-			foreach ( $posts as $i => $post ) {
-				if ( pll_is_translated_post_type( $post->post_type ) && $translated_post_id = pll_get_post( $post->ID, $lang_code ) ) {
-					$translated_posts[$i] = get_post( $translated_post_id );
-					unset( $translated_post_id );
-				} else {
-					$translated_posts[$i] = $post;
+			if ( $posts ) {
+				foreach ( $posts as $i => $post ) {
+					if ( pll_is_translated_post_type( $post->post_type ) && $translated_post_id = pll_get_post( $post->ID, $lang_code ) ) {
+						$translated_posts[$i] = get_post( $translated_post_id );
+						unset( $translated_post_id );
+					} else {
+						$translated_posts[$i] = $post;
+					}
 				}
+				$field_object['value'] = $translated_posts;
 			}
-			$field_object['value'] = $translated_posts;
-
 			$this->update_field( $field_object['key'], $field_object['value'], $post_id );
 
 		}
