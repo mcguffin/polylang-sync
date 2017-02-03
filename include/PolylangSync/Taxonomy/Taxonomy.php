@@ -17,9 +17,12 @@ class Taxonomy extends Core\Singleton {
 	protected function __construct() {
 
 		$this->core = Core\Core::instance();
-
+		//*
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
-		
+		add_action( 'rest_api_init', array( $this, 'admin_init' ) );
+		/*/
+		add_action( 'init', array( $this, 'admin_init' ) );
+		//*/
 //		add_action( 'load-edit-tags.php', array( $this, 'enqueue_assets' ) );
 	}
 

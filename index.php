@@ -5,7 +5,7 @@ Plugin Name: Polylang Sync
 Plugin URI: http://wordpress.org/
 Description: Keep Menus, ACF-Fields and more in Sync on your Polylang-Powered multilingual WordPress-Site.
 Author: Jörn Lund
-Version: 1.0.0
+Version: 0.0.1
 Author URI: 
 License: GPL3
 
@@ -45,8 +45,7 @@ require_once POLYLANG_SYNC_DIRECTORY . 'include/vendor/autoload.php';
 
 Core\Core::instance();
 
-
-
+Taxonomy\Taxonomy::instance();
 
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
@@ -54,8 +53,6 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 	Admin\Admin::instance();
 	
 	Settings\SettingsPagePolylangSync::instance();
-
-	Taxonomy\Taxonomy::instance();
 
 /*
 	Admin\Tools::instance();

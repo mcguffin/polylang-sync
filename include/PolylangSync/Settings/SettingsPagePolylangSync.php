@@ -93,6 +93,7 @@ class SettingsPagePolylangSync extends Settings {
 
 		// more settings go here ...
 		register_setting( $this->optionset , 'polylang_sync_taxonomies' , array( &$this , 'sanitize_taxonomies' ) );
+		register_setting( $this->optionset , 'polylang_sync_term_meta' , array( &$this , 'sanitize_chackbox' ) );
 
 		add_settings_section( $settings_section, __( 'Taxonomies',  'polylang-sync' ), array( &$this, 'sync_taxonomies_description' ), $this->optionset );
 
