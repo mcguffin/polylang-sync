@@ -2,8 +2,8 @@ Polylang Sync ToDo
 ==================
 
  - [ ] Menus
+ 	- [x] Generate menu translations
  	- [ ] Sync menus
- - [x] ACF
- - [ ] Taxonomy 
- 	- [ ] Sync hierarchical Taxonomies
- 	- [ ] Edit screen: js-remove translated tag after deletion
+ - [ ] ACF
+ 	- [x] Field-Option: translate content from ... 
+ 	- [ ] Sync taxonomy fields

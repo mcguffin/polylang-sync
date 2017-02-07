@@ -257,7 +257,6 @@ class Sync extends Core\Singleton {
 				// create parent ... later!
 			}
 		}
-		error_log( var_export( $term_translation_group,true ) );
 		pll_save_term_translations( $term_translation_group );
 		$this->unhook_created = false;
 	}

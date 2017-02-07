@@ -51,7 +51,7 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
 
 	Admin\Admin::instance();
-	
+
 	Settings\SettingsPagePolylangSync::instance();
 
 /*

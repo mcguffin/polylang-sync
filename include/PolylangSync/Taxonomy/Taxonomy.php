@@ -17,13 +17,11 @@ class Taxonomy extends Core\Singleton {
 	protected function __construct() {
 
 		$this->core = Core\Core::instance();
-		//*
+
+
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'rest_api_init', array( $this, 'admin_init' ) );
-		/*/
-		add_action( 'init', array( $this, 'admin_init' ) );
-		//*/
-//		add_action( 'load-edit-tags.php', array( $this, 'enqueue_assets' ) );
+
 	}
 
 	// add settings page
@@ -32,7 +30,9 @@ class Taxonomy extends Core\Singleton {
 	 */
 	public function admin_init() {
 
-		$this->sync = Sync::instance();
+		if ( function_exists( 'PLL' ) ) {
+			$this->sync = Sync::instance();
+		}
 
 	}
 	
