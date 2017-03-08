@@ -47,8 +47,8 @@ class Admin extends Core\Singleton {
 	 */
 	function setup() {
 		if ( function_exists( 'PLL' ) ) {
-			
-			$this->menu_edit = Menu\Edit::instance();
+
+			$this->menu = Menu\Menu::instance();
 
 			if ( class_exists( 'acf' ) && function_exists( 'acf_get_field_groups' ) ) {
 				$this->acf		= ACF\ACF::instance();

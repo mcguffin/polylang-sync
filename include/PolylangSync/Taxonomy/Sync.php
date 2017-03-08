@@ -132,7 +132,10 @@ class Sync extends Core\Singleton {
 		}
 		$this->unhook_add_meta = true;
 
-		$taxonomy = get_term( $object_id )->taxonomy;
+		if ( ! $term = get_term( $object_id ) ) {
+			return;
+		}
+		$taxonomy 	= $term->taxonomy;
 
 		if ( pll_is_translated_taxonomy( $taxonomy ) ) {
 
