@@ -297,10 +297,13 @@ class Menu extends Core\Singleton {
 	
 	private function update_menu_item( $menu_item, $lang_code, $translated_menu_item, $translated_menu_id ) {
 		if ( $parent_menu_item = get_post( $menu_item->menu_item_parent ) ) {
-			$new_parent = $this->get_translated_menu_item( $parent_menu_item, $lang_code );
-		} else {
-			$new_parent = 0;
+			if ( $new_parent = $this->get_translated_menu_item( $parent_menu_item, $lang_code ) ) {
+				$new_parent_id = $new_parent->ID;
+			}
 		}
+		if ( ! isset( $new_parent_id ) ) {
+			$new_parent_id = 0;
+		};
 		$new_menu_item_data = array(
 			'menu-item-object-id'	=> $translated_menu_item->object_id,
 			'menu-item-object' 		=> $translated_menu_item->object,
@@ -311,7 +314,7 @@ class Menu extends Core\Singleton {
 
 			'menu-item-position' 	=> $menu_item->menu_order,
 			'menu-item-target'		=> $menu_item->target,
-			'menu-item-parent-id' 	=> intval( $new_parent ),
+			'menu-item-parent-id' 	=> $new_parent_id,
 			'menu-item-xfn'			=> $menu_item->xfn,
 			'menu-item-classes'		=> trim( implode( ' ', $menu_item->classes ) ),
 
