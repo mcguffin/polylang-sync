@@ -2,35 +2,52 @@
 
 namespace PolylangSync\Core;
 
-class Core extends Singleton {
+use PolylangSync\Compat;
+
+class Core extends Plugin {
 
 	/**
 	 *	Private constructor
 	 */
 	protected function __construct() {
 		add_action( 'plugins_loaded' , array( $this , 'load_textdomain' ) );
+		add_action( 'plugins_loaded' , array( $this , 'init_compat' ), 0 );
 
 		register_activation_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'activate' ) );
 		register_deactivation_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'deactivate' ) );
 		register_uninstall_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'uninstall' ) );
-		
+
 		parent::__construct();
 	}
 
 
 	/**
 	 *	Load text domain
-	 * 
+	 *
 	 *  @action plugins_loaded
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain( 'polylang-sync' , false, POLYLANG_SYNC_DIRECTORY . '/languages/' );
 	}
 
+	/**
+	 *	Load Compatibility classes
+	 *
+	 *  @action plugins_loaded
+	 */
+	public function init_compat() {
+		if ( class_exists( 'Polylang' ) ) {
+			Compat\Polylang::instance();
+		}
+		if ( class_exists( 'acf' ) && function_exists('acf') && version_compare( acf()->version, '5.0.0', '>=' ) ) {
+			Compat\ACF::instance();
+		}
+	}
+
 
 	/**
 	 *	Get installed Polylang languages
-	 * 
+	 *
 	 *  @return array	language slugs
 	 */
 	public function get_pll_languages() {
