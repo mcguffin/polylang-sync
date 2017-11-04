@@ -9,7 +9,7 @@ class ACFTranslate extends Core\Singleton {
 	private $core;
 
 	private $translated_acf_fields;
-	
+
 	private $ppl_mo;
 
 	/**
@@ -24,14 +24,14 @@ class ACFTranslate extends Core\Singleton {
 		add_action( 'init' , array( &$this , 'init' ), 9 );
 
 		foreach ( $this->get_supported_fields() as $type ) {
-			add_action( "acf/render_field_settings/type={$type}",		array( $this , 'render_acf_settings' ) );
+			add_action( "acf/render_field_settings/type={$type}", array( $this, 'render_acf_settings' ) );
 		}
 		add_action( 'load-post.php', array( &$this, 'enqueue_assets' ) );
 		add_action( 'load-post-new.php', array( &$this, 'enqueue_assets' ) );
 	}
 
 	/**
-	 * Enqueue options Assets
+	 *	Enqueue options Assets
 	 */
 	function enqueue_assets() {
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
@@ -69,18 +69,18 @@ class ACFTranslate extends Core\Singleton {
 				add_filter( "acf/format_value/key={$field['key']}", 'pll__' );
 				$this->translated_acf_fields[] = $field;
 				$field_keys[ $field['key'] ] = $field;
-				
+
 				if ( ! isset( $field_groups[ $field['key'] ] ) ) {
 					 $field_groups[ $field['key'] ]	= $this->get_field_group( $field );
 				}
-				
+
 			}
 		}
-		
-		$sql = "SELECT m1.post_id AS post_id, m1.meta_value AS field_key, m2.meta_value AS str 
-					FROM $wpdb->postmeta AS m1 
-					INNER JOIN $wpdb->postmeta AS m2 
-						ON m1.post_id=m2.post_id AND m1.meta_id!=m2.meta_id AND m1.meta_key=CONCAT('_',m2.meta_key) 
+
+		$sql = "SELECT m1.post_id AS post_id, m1.meta_value AS field_key, m2.meta_value AS str
+					FROM $wpdb->postmeta AS m1
+					INNER JOIN $wpdb->postmeta AS m2
+						ON m1.post_id=m2.post_id AND m1.meta_id!=m2.meta_id AND m1.meta_key=CONCAT('_',m2.meta_key)
 					WHERE m1.meta_value in (".implode(',', array_fill(0, count( $field_keys ), '%s')).")";
 
 		$sql = call_user_func_array( array( $wpdb, 'prepare' ), array_merge( array($sql), array_keys( $field_keys ) ) );
@@ -90,7 +90,7 @@ class ACFTranslate extends Core\Singleton {
 			array_keys( $field_keys );
 			$field		 = $field_keys[ $row->field_key ];
 			$field_group = $field_groups[ $row->field_key ];
-			
+
 			pll_register_string( sanitize_title( 'acf-' . substr( $row->str, 0, 20 ) ), $row->str, $field_group['title'], $field['type'] == 'textarea' );
 		}
 	}
@@ -108,7 +108,7 @@ class ACFTranslate extends Core\Singleton {
 		}
 		return $field;
 	}
-	
+
 	/**
 	 *	Get Supported ACF fields
 	 */
@@ -131,7 +131,7 @@ class ACFTranslate extends Core\Singleton {
 		}
 		return false;
 	}
-	
+
 
 
 	/**
@@ -154,7 +154,7 @@ class ACFTranslate extends Core\Singleton {
 				'message'		=> __( 'Translate this field through Polylang strings', 'polylang-sync' ),
 				'width'			=> 50,
 			));
-		}		
+		}
 	}
 
 
