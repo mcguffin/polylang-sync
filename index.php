@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/
 Description: Keep Menus, ACF-Fields and more in Sync on your Polylang-Powered multilingual WordPress-Site.
 Author: Jörn Lund
 Version: 0.0.1
-Author URI: 
+Author URI:
 License: GPL3
 
 Text Domain: polylang-sync
@@ -16,7 +16,7 @@ Domain Path: /languages/
 /*  Copyright 2017  Jörn Lund
 
     This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as 
+    it under the terms of the GNU General Public License, version 2, as
     published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
@@ -49,20 +49,13 @@ Taxonomy\Taxonomy::instance();
 
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
+	// don't WP-Update actual repos!
+	if ( ! file_exists( ACFQUICKEDIT_DIRECTORY . '/.git/' ) ) {
+		AutoUpdate\AutoUpdateGithub::instance();
+	}
 
 	Admin\Admin::instance();
 
 	Settings\SettingsPagePolylangSync::instance();
 
-/*
-	Admin\Tools::instance();
-	Admin\Settings::instance();
-
-	// Compatibility plugins
-	$compat = glob(plugin_dir_path(__FILE__) . 'include/compat/*.php');
-	foreach ( $compat as $compat_file ) {
-		require_once $compat_file;
-	}
-*/
 }
-
