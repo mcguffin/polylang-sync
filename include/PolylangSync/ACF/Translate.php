@@ -4,7 +4,7 @@ namespace PolylangSync\ACF;
 use PolylangSync\Core;
 
 
-class ACFTranslate extends Core\Singleton {
+class Translate extends Core\Singleton {
 
 	private $core;
 

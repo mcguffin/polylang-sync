@@ -83,6 +83,7 @@ gulp.task('scss', function() {
 gulp.task('js-admin', function() {
     return [
 		do_js( 'admin/nav-menus' ),
+		do_js( 'admin/admin' ),
     ];
 
 });

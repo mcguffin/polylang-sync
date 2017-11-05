@@ -27,15 +27,15 @@ class Admin extends Core\Singleton {
 	function print_acf_free_notice() {
 		?>
 		<div class="notice notice-error is-dismissible">
-			<p><?php 
-				printf( 
-					_x( 'The Polylang-Sync Plugin plugin requires <a href="%2$s">Polylang</a> to be installed and activated.', 
+			<p><?php
+				printf(
+					_x( 'The Polylang-Sync Plugin plugin requires <a href="%2$s">Polylang</a> to be installed and activated.',
 						'1: ACF Pro URL, 2: Polylang URL',
-						'acf-quick-edit-fields' 
+						'acf-quick-edit-fields'
 					),
 					'http://www.advancedcustomfields.com/pro/',
 					'https://wordpress.org/plugins-wp/polylang/'
-				); 
+				);
 			?></p>
 		</div>
 		<?php
@@ -51,14 +51,14 @@ class Admin extends Core\Singleton {
 			$this->menu = Menu\Menu::instance();
 
 			if ( class_exists( 'acf' ) && function_exists( 'acf_get_field_groups' ) ) {
-				$this->acf		= ACF\ACF::instance();
+				//$this->acf		= ACF\ACF::instance();
 			}
 
 		} else if ( class_exists( 'acf' ) && current_user_can( 'activate_plugins' ) ) {
-			add_action( 'admin_notices', array( $this, 'print_acf_free_notice' ) );
+		//	add_action( 'admin_notices', array( $this, 'print_acf_free_notice' ) );
 		}
 	}
-	
+
 
 	/**
 	 * @action admin_init
@@ -78,4 +78,3 @@ class Admin extends Core\Singleton {
 	}
 
 }
-
