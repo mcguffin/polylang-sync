@@ -8,6 +8,7 @@ Author: Jörn Lund
 Version: 0.0.2
 Author URI: https://github.com/mcguffin/
 License: GPL3
+Github Repository: mcguffin/polylang-sync
 
 Text Domain: polylang-sync
 Domain Path: /languages/
