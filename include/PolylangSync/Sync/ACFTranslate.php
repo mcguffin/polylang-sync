@@ -1,6 +1,6 @@
 <?php
 
-namespace PolylangSync\ACF;
+namespace PolylangSync\Sync;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
@@ -9,7 +9,7 @@ if ( ! defined('ABSPATH') ) {
 use PolylangSync\Core;
 
 
-class Translate extends Core\Singleton {
+class ACFTranslate extends Core\Singleton {
 
 	private $core;
 

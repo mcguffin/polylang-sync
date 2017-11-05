@@ -13,7 +13,7 @@ abstract class Settings extends Core\Singleton {
 	protected $shortcode = false;
 
 	/**
-	 *	Constructor
+	 *	@inheritddoc
 	 */
 	protected function __construct(){
 

@@ -49,8 +49,6 @@ require_once POLYLANG_SYNC_DIRECTORY . 'include/vendor/autoload.php';
 
 Core\Core::instance();
 
-Taxonomy\Taxonomy::instance();
-
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
 	// don't WP-Update actual repos!

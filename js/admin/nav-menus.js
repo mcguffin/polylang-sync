@@ -1,7 +1,7 @@
 (function($){
+	console.log('Hier!')
 	$(document).ready(function(){
 		$('#post-body').append( $('#translate-nav-menu') );
-
 		$(document).on('click','#translate-nav-menu button',function(e) {
 			e.preventDefault();
 			var data = {};
@@ -15,4 +15,4 @@
 			document.location.search = $.param(data);
 		});
 	});
-})(jQuery); 
+})(jQuery);

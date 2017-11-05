@@ -1,6 +1,6 @@
 <?php
 
-namespace PolylangSync\Menu;
+namespace PolylangSync\Sync;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
@@ -98,6 +98,7 @@ class Menu extends Core\Singleton {
 		wp_localize_script( $asset_id , 'polylang_sync_nav_menus' , array(
 		) );
 	}
+
 	/**
 	 *	Update menu metadata
 	 *

@@ -1,6 +1,6 @@
 <?php
 
-namespace PolylangSync\Taxonomy;
+namespace PolylangSync\Sync;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
@@ -9,7 +9,7 @@ if ( ! defined('ABSPATH') ) {
 use PolylangSync\Core;
 
 
-class Sync extends Core\Singleton {
+class Taxonomy extends Core\Singleton {
 
 	private $core;
 

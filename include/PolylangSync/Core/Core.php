@@ -41,7 +41,7 @@ class Core extends Plugin {
 			Compat\Polylang::instance();
 		}
 		if ( class_exists( 'acf' ) && function_exists('acf') && version_compare( acf()->version, '5.0.0', '>=' ) ) {
-			Compat\ACFCompat::instance();
+			Compat\ACF::instance();
 		}
 	}
 
