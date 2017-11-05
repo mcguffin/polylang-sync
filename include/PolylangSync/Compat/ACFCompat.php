@@ -2,6 +2,11 @@
 
 namespace PolylangSync\Compat;
 
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
+
 use PolylangSync\ACF;
 use PolylangSync\Core;
 

@@ -1,6 +1,11 @@
 <?php
 
 namespace PolylangSync\Menu;
+
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
 use PolylangSync\Core;
 
 /**
@@ -9,9 +14,9 @@ use PolylangSync\Core;
 class Menu extends Core\Singleton {
 
 	private $core;
-	
+
 	private $pll_language;
-	
+
 	private $unhook_delete_term = false;
 
 	/**
@@ -60,7 +65,7 @@ class Menu extends Core\Singleton {
 			?>
 				<div id="translate-nav-menu" class="menu-settings">
 					<h3><?php _e( 'Polylang Sync', 'polylang-menu-translator' ) ?></h3>
-					
+
 
 					<fieldset class="menu-settings-group sync-menu">
 						<legend class="menu-settings-group-name howto"><?php _e( 'Syncronize', 'polylang-sync' ) ?></legend>
@@ -134,12 +139,12 @@ class Menu extends Core\Singleton {
 	 *	@action wp_update_nav_menu
 	 */
 	function wp_update_nav_menu( $nav_menu_id ) {
-		
+
 		// update menu settings
 		if ( isset( $_REQUEST[ 'polylang-sync-menu' ] ) ) {
 			// save sync setting accross menus
 			$do_sync = boolval( $_REQUEST[ 'polylang-sync-menu' ] );
-			
+
 			if ( ! $do_sync ) {
 				$this->set_nav_menu_sync( $nav_menu_id, false );
 			}
@@ -162,7 +167,7 @@ class Menu extends Core\Singleton {
 
 	//
 	// logic starts here
-	// 
+	//
 
 
 	/**
@@ -281,8 +286,8 @@ class Menu extends Core\Singleton {
 		}
 		remove_filter( 'locale', array( $this, 'locale' ) );
 	}
-	
-	
+
+
 	private function get_translated_menu_item( $menu_item, $lang_code ) {
 
 		if ( $translation_group = get_post_meta( $menu_item->ID, 'polylang_sync_translation_group', true ) ) {
@@ -294,7 +299,7 @@ class Menu extends Core\Singleton {
 		}
 		return false;
 	}
-	
+
 	private function update_menu_item( $menu_item, $lang_code, $translated_menu_item, $translated_menu_id ) {
 		if ( $parent_menu_item = get_post( $menu_item->menu_item_parent ) ) {
 			if ( $new_parent = $this->get_translated_menu_item( $parent_menu_item, $lang_code ) ) {
@@ -320,11 +325,11 @@ class Menu extends Core\Singleton {
 
 			'menu-item-status'		=> 'publish',
 		);
-		return wp_update_nav_menu_item( $translated_menu_id, $translated_menu_item->ID, $new_menu_item_data );	
+		return wp_update_nav_menu_item( $translated_menu_id, $translated_menu_item->ID, $new_menu_item_data );
 	}
-	
+
 	/**
-	 *	@param	$menu_item	WP_Post 
+	 *	@param	$menu_item	WP_Post
 	 *	@param	$target_language	String
 	 *	@param	$translated_menu_id	int	Menu ID
 	 *
@@ -410,7 +415,7 @@ class Menu extends Core\Singleton {
 			$new_menu_item_data[ 'menu-item-parent-id' ] = $menu_map[ absint( $menu_item->menu_item_parent ) ];
 		}
 
-		return wp_update_nav_menu_item( $translated_menu_id, $menu_item->id, $new_menu_item_data );	
+		return wp_update_nav_menu_item( $translated_menu_id, $menu_item->id, $new_menu_item_data );
 	}
 
 	/**
@@ -433,7 +438,7 @@ class Menu extends Core\Singleton {
 	 *	@return	int ID of the translated nav menu
 	 */
 	private function translate_nav_menu( $nav_menu, $target_language ) {
-		
+
 		$menu_map 			= array();
 
 		// setup nav menu
@@ -558,7 +563,7 @@ class Menu extends Core\Singleton {
 	}
 
 	/**
-	 *	Get menu Translation group. 
+	 *	Get menu Translation group.
 	 *	First tries to get it from term_meta
 	 *	Then tries to get
 	 *
@@ -603,7 +608,7 @@ class Menu extends Core\Singleton {
 		foreach ( $menu_item_translation_group as $lang_code => $translated_menu_item_id ) {
 			update_post_meta( $translated_menu_item_id, $meta_key_name, $menu_item_translation_group );
 		}
-		
+
 	}
 
 	private function update_menu_translation_group( $nav_menu_id, $menu_translation_group ) {
@@ -657,7 +662,7 @@ class Menu extends Core\Singleton {
 		}
 		return $found_locations;
 	}
-	
+
 	/**
 	 *	Get menu Language.
 	 *	Returns language code of first translatable menu item
@@ -708,4 +713,3 @@ class Menu extends Core\Singleton {
 
 
 }
-

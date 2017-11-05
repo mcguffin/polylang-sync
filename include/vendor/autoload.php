@@ -2,6 +2,11 @@
 
 namespace PolylangSync;
 
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
+
 function __autoload( $class ) {
 	if ( strpos( $class, 'PolylangSync\\' ) === false ) {
 		// not our plugin.

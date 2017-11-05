@@ -1,6 +1,11 @@
 <?php
 
 namespace PolylangSync\Taxonomy;
+
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
 use PolylangSync\Core;
 
 
@@ -9,7 +14,7 @@ class Sync extends Core\Singleton {
 	private $core;
 
 	private $sync_taxonomies;
-	
+
 	private $unhook_created		= false;
 	private $unhook_delete		= false;
 
@@ -47,7 +52,7 @@ class Sync extends Core\Singleton {
 			add_action( 'updated_term_meta',	array( $this, 'updated_meta' ), 10, 4 );
 		}
 	}
-	
+
 	/**
 	 *	Synchronize taxonomy
 	 */
@@ -97,7 +102,7 @@ class Sync extends Core\Singleton {
 							}
 						}
 					}
-					
+
 				}
 				pll_save_term_translations( $term_translation_group );
 
@@ -113,7 +118,7 @@ class Sync extends Core\Singleton {
 						}
 					}
 				}
-				
+
 			}
 			$this->unhook_created		= false;
 			$this->unhook_add_meta		= false;
@@ -236,14 +241,14 @@ class Sync extends Core\Singleton {
 			return;
 		}
 		$this->unhook_created = true;
-		
-		// create term translations		
+
+		// create term translations
 		$term		= get_term( $term_id );
 		$taxonomy	= get_taxonomy( $term->taxonomy );
 		$languages	= $this->core->get_pll_languages();
 		$term_lang	= pll_get_term_language( $term_id );
 
-		$term_translation_group = array( 
+		$term_translation_group = array(
 			$term_lang	=> $term_id,
 		);
 		foreach ( $languages as $lang ) {
@@ -265,10 +270,10 @@ class Sync extends Core\Singleton {
 	}
 
 	private function create_term_translation( $term, $lang_code ) {
-		$translated_term_arr = wp_insert_term( 
-			sprintf( '%s (%s)', $term->name, $lang_code ), 
-			$term->taxonomy, 
-			array( 'description' => $term->description ) 
+		$translated_term_arr = wp_insert_term(
+			sprintf( '%s (%s)', $term->name, $lang_code ),
+			$term->taxonomy,
+			array( 'description' => $term->description )
 		);
 		if ( ! is_wp_error( $translated_term_arr ) ) {
 			pll_set_term_language( $translated_term_arr[ 'term_id' ], $lang_code );
@@ -299,7 +304,7 @@ class Sync extends Core\Singleton {
 
 		$this->unhook_delete = true;
 
-		
+
 		// delete all translated terms
 		$languages	= $this->core->get_pll_languages();
 		$term_lang	= pll_get_term_language( $term_id );
@@ -312,10 +317,10 @@ class Sync extends Core\Singleton {
 			if ( $translated_term_id = pll_get_term( $term_id, $lang ) ) {
 				wp_delete_term( $translated_term_id, $taxonomy );
 			}
-			
+
 		}
 
 		$this->unhook_delete = false;
 	}
-	
+
 }

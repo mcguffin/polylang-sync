@@ -35,8 +35,12 @@ https://github.com/mcguffin/wp-plugin-scaffold
 Command line args were: `"ACF Polylang Sync" admin+css+js settings_page+css+js git`
 */
 
-
 namespace PolylangSync;
+
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
 
 define( 'POLYLANG_SYNC_FILE', __FILE__ );
 define( 'POLYLANG_SYNC_DIRECTORY', plugin_dir_path(__FILE__) );
@@ -54,7 +58,7 @@ if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 		AutoUpdate\AutoUpdateGithub::instance();
 	}
 
-	Admin\Admin::instance();
+//	Admin\Admin::instance();
 
 	Settings\SettingsPagePolylangSync::instance();
 

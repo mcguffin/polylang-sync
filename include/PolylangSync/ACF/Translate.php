@@ -1,6 +1,11 @@
 <?php
 
 namespace PolylangSync\ACF;
+
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
 use PolylangSync\Core;
 
 
@@ -10,30 +15,34 @@ class Translate extends Core\Singleton {
 
 	private $translated_acf_fields;
 
-	private $ppl_mo;
+	private $pll_mo;
 
 	/**
-	 *	Private constructor
+	 *	@inheritdoc
 	 */
 	protected function __construct() {
 
 		$this->core	= Core\Core::instance();
 
-		$this->ppl_mo = array();
+		$this->pll_mo = array();
 
 		add_action( 'init' , array( &$this , 'init' ), 9 );
 
 		foreach ( $this->get_supported_fields() as $type ) {
 			add_action( "acf/render_field_settings/type={$type}", array( $this, 'render_acf_settings' ) );
 		}
-		add_action( 'load-post.php', array( &$this, 'enqueue_assets' ) );
-		add_action( 'load-post-new.php', array( &$this, 'enqueue_assets' ) );
+
+		add_action( 'load-post.php', array( $this, 'enqueue_assets' ) );
+		add_action( 'load-post-new.php', array( $this, 'enqueue_assets' ) );
 	}
 
 	/**
 	 *	Enqueue options Assets
+	 *
+	 *	@action load-post.php
+	 *	@action load-post-new.php
 	 */
-	function enqueue_assets() {
+	public function enqueue_assets() {
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
 			$css_src = '/css/admin/post.css';
 		} else {
@@ -95,16 +104,18 @@ class Translate extends Core\Singleton {
 		}
 	}
 
-
+	/**
+	 *	@filter  "acf/prepare_field/key={$field['key']}"
+	 */
 	public function prepare_field( $field ) {
 
 		if ( $post = get_post() ) {
 			$lang = pll_get_post_language( $post->ID );
-			if ( ! isset( $this->ppl_mo[ $lang ] ) ) {
-				$this->ppl_mo[ $lang ] = new \PLL_MO();
-				$this->ppl_mo[ $lang ]->import_from_db( PLL()->model->get_language( $lang ) );
+			if ( ! isset( $this->pll_mo[ $lang ] ) ) {
+				$this->pll_mo[ $lang ] = new \PLL_MO();
+				$this->pll_mo[ $lang ]->import_from_db( PLL()->model->get_language( $lang ) );
 			}
-			$field['append'] = ' =&gt; ' . $this->ppl_mo[ $lang ]->translate( $field['value'] );
+			$field['append'] = ' =&gt; ' . $this->pll_mo[ $lang ]->translate( $field['value'] );
 		}
 		return $field;
 	}

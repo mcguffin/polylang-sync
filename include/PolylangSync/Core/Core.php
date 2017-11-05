@@ -2,6 +2,11 @@
 
 namespace PolylangSync\Core;
 
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
+
 use PolylangSync\Compat;
 
 class Core extends Plugin {
@@ -12,10 +17,6 @@ class Core extends Plugin {
 	protected function __construct() {
 		add_action( 'plugins_loaded' , array( $this , 'load_textdomain' ) );
 		add_action( 'plugins_loaded' , array( $this , 'init_compat' ), 0 );
-
-		register_activation_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'activate' ) );
-		register_deactivation_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'deactivate' ) );
-		register_uninstall_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'uninstall' ) );
 
 		parent::__construct();
 	}
@@ -70,25 +71,6 @@ class Core extends Plugin {
 	 */
 	public function get_asset_url( $asset ) {
 		return plugins_url( $asset, POLYLANG_SYNC_FILE );
-	}
-
-
-	/**
-	 *	Fired on plugin activation
-	 */
-	public static function activate() {
-	}
-
-	/**
-	 *	Fired on plugin deactivation
-	 */
-	public static function deactivate() {
-	}
-
-	/**
-	 *	Fired on plugin deinstallation
-	 */
-	public static function uninstall() {
 	}
 
 }

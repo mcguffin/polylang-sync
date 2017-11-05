@@ -1,6 +1,11 @@
 <?php
 
 namespace PolylangSync\Settings;
+
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
 use PolylangSync\Ajax;
 use PolylangSync\Core;
 use PolylangSync\Taxonomy;
@@ -8,13 +13,13 @@ use PolylangSync\Taxonomy;
 
 class SettingsPagePolylangSync extends Settings {
 
-	private $optionset = 'polylang_sync'; 
+	private $optionset = 'polylang_sync';
 
-	private $ajax_sync_handler = null; 
+	private $ajax_sync_handler = null;
 
 
 	/**
-	 *	Constructor
+	 *	@inheritdoc
 	 */
 	protected function __construct() {
 
@@ -136,7 +141,7 @@ class SettingsPagePolylangSync extends Settings {
 	}
 
 	public function setting_sync_taxonomies_now() {
-		
+
 		$send_data = array(
 			'action'	=> $this->ajax_sync_handler->action,
 			'nonce'		=> $this->ajax_sync_handler->nonce,
@@ -155,7 +160,7 @@ class SettingsPagePolylangSync extends Settings {
 						$.post( '<?php echo admin_url( 'admin-ajax.php' ) ?>', <?php echo json_encode( $send_data ) ?>, function() {
 							$spinner.css( 'visibility','hidden' );
 						} );
-					
+
 					});
 				})(jQuery);
 			</script>
@@ -172,7 +177,7 @@ class SettingsPagePolylangSync extends Settings {
 
 		foreach ( $taxonomies as $taxonomy ) {
 			if ( \pll_is_translated_taxonomy( $taxonomy->name ) ) {
-	//			
+	//
 				?><label>
 					<input type="checkbox" <?php checked( isset( $setting[$taxonomy->name] ), true, true ); ?> name="<?php echo $setting_name ?>[<?php esc_attr_e( $taxonomy->name ) ?>]" value="<?php esc_attr_e( $taxonomy->name ) ?>" />
 					<?php echo $taxonomy->label ?>
@@ -186,7 +191,7 @@ class SettingsPagePolylangSync extends Settings {
 	 *
 	 * @return string sanitized value
 	 */
-	public function sanitize_taxonomies( $value ) {	
+	public function sanitize_taxonomies( $value ) {
 		// do sanitation here!
 		$return = array();
 		foreach ( (array) $value as $tax ) {

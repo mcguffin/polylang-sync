@@ -1,6 +1,12 @@
 <?php
 
 namespace PolylangSync\Admin;
+
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
+
 use PolylangSync\Core;
 use PolylangSync\ACF;
 use PolylangSync\Menu;
@@ -11,7 +17,7 @@ class Admin extends Core\Singleton {
 	private $core;
 
 	/**
-	 *	Private constructor
+	 *	@inheritdoc
 	 */
 	protected function __construct() {
 

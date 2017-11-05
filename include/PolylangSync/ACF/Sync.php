@@ -1,6 +1,11 @@
 <?php
 
 namespace PolylangSync\ACF;
+
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
 use PolylangSync\Core;
 
 
@@ -19,18 +24,20 @@ class Sync extends Core\Singleton {
 
 		$this->core	= Core\Core::instance();
 
-		add_action( 'init' , array( &$this , 'init' ) );
+		add_action( 'init' , array( $this, 'init' ) );
 
 //		add_action( 'save_post' ,  array( &$this , 'save_post' ) , 20 , 3 );
-		add_action( 'pll_save_post' ,  array( &$this , 'pll_save_post' ) , 20 , 3 );
+		add_action( 'pll_save_post' ,  array( $this, 'pll_save_post' ) , 20 , 3 );
 
 		foreach ( $this->get_supported_fields() as $type ) {
-			add_action( "acf/render_field_settings/type={$type}" , array( $this , 'render_acf_settings' ) );
+			add_action( "acf/render_field_settings/type={$type}" , array( $this, 'render_acf_settings' ) );
 		}
 	}
 
 	/**
 	 *	Get Supported ACF fields
+	 *
+	 *	@return array
 	 */
 	public function get_supported_fields() {
 		return apply_filters( 'polylang_acf_sync_supported_fields', array(
@@ -73,7 +80,10 @@ class Sync extends Core\Singleton {
 			'repeater',
 		));
 	}
+
 	/**
+	 *	Add sync field setting
+	 *
 	 *	@action acf/render_field_settings/type={$type}
 	 */
 	public function render_acf_settings( $field ) {
@@ -91,10 +101,9 @@ class Sync extends Core\Singleton {
 			if ( $field['type'] === 'taxonomy' ) {
 				/*
 				Polylang-Sync AN:
-					
+
 				Polylang-Sync AUS:
-					
-				
+
 				*/
 				$instructions = __( 'Enabling this field only makes sense if...', 'polylang-sync' );
 			}
@@ -108,7 +117,7 @@ class Sync extends Core\Singleton {
 				'message'		=> __( 'Synchronize this field between translations', 'polylang-sync' ),
 				'width'			=> 50,
 			));
-		}		
+		}
 	}
 
 
@@ -139,7 +148,7 @@ class Sync extends Core\Singleton {
 				$this->sync_acf_fields[] = $field;
 			}
 		}
-		
+
 	}
 
 
@@ -148,13 +157,17 @@ class Sync extends Core\Singleton {
 	 */
 	public function pll_save_post( $source_post_id, $source_post, $translation_group ) {
 		$this->update_fields( $this->sync_acf_fields, $source_post_id, $translation_group );
-//exit();
 	}
 
-	
+
+	/**
+	 *	@param	array	$fields				ACF Field objects
+	 *	@param	int		$source_post_id		ACF Field objects
+	 *	@param	array	$translation_group	PLL translation group
+	 */
 	private function update_fields( $fields, $source_post_id, $translation_group ) {
 		foreach ( $fields as $synced_field ) {
-		
+
 			$field_object = get_field_object( $synced_field['key'], $source_post_id );
 
 			switch ( $synced_field['type'] ) {
@@ -181,7 +194,7 @@ class Sync extends Core\Singleton {
 						$this->update_field_value( $field_object, $translation_group );
 					}
 					break;
-					
+
 				case 'relationship':
 					$this->update_relationship( $field_object, $translation_group );
 					break;
@@ -224,7 +237,14 @@ class Sync extends Core\Singleton {
 			}
 		}
 	}
-	
+
+	/**
+	 *	Called when a repeater field is updated.
+	 *
+	 *	@param	array 	$field_object		ACF Field object
+	 *	@param	array 	$translation_group	PLL Translation group
+	 *	@param	int		$source_post_id
+	 */
 	private function update_repeater( $field_object, $translation_group, $source_post_id ) {
 		$values = [];
 		if ( have_rows( $field_object['name'] ) ) {
@@ -245,7 +265,7 @@ class Sync extends Core\Singleton {
 								$value = $this->get_translated_media( $value, $lang_code, [] );
 							}
 							break;
-						case 'relationship':	
+						case 'relationship':
 							$post = get_post( $value );
 							if ( pll_is_translated_post_type( $post->post_type ) ) {
 								$translated_post = get_translated_post( $post_id, $lang_code );
@@ -258,7 +278,7 @@ class Sync extends Core\Singleton {
 							if ( PLL()->options['media_support'] ) {
 							//	$value = $this->get_translated_media( $value, $lang_code, [] );
 							}
-							
+
 							break;
 						case 'taxonomy':
 							break;
@@ -270,6 +290,12 @@ class Sync extends Core\Singleton {
 		}
 	}
 
+	/**
+	 *	Called when any field is updated.
+	 *
+	 *	@param	array 	$field_object		ACF Field object
+	 *	@param	array 	$translation_group	PLL Translation group
+	 */
 	private function update_field_value( $field_object, $translation_group ) {
 		foreach ( $translation_group as $lang_code => $post_id ) {
 			$selector = $field_object['key'];
@@ -277,7 +303,12 @@ class Sync extends Core\Singleton {
 		}
 	}
 
-
+	/**
+	 *	Called when a relationship field is updated.
+	 *
+	 *	@param	array 	$field_object		ACF Field object
+	 *	@param	array 	$translation_group	PLL Translation group
+	 */
 	private function update_relationship( $field_object, $translation_group ) {
 
 		$posts				= $field_object['value'];
@@ -299,8 +330,13 @@ class Sync extends Core\Singleton {
 
 		}
 	}
-	
-	
+
+	/**
+	 *	Called when a file or image field is updated.
+	 *
+	 *	@param	array 	$field_object		ACF Field object
+	 *	@param	array 	$translation_group	PLL Translation group
+	 */
 	private function update_upload( $field_object, $translation_group ) {
 
 
@@ -316,6 +352,13 @@ class Sync extends Core\Singleton {
 		pll_save_post_translations( $media_translation_group );
 	}
 
+	/**
+	 *	Get a posts translation
+	 *
+	 *	@param	int 		$post_id
+	 *	@param	string 		$lang_code
+	 *	@return	bool|object	WP_Post or false
+	 */
 	private function get_translated_post( $post_id, $lang_code ) {
 		if ( $translated_post_id = pll_get_post( $post_id, $lang_code ) ) {
 			return get_post( $translated_post_id );
@@ -324,17 +367,20 @@ class Sync extends Core\Singleton {
 	}
 
 	/**
+	 *	@param	WP_Post|array 	$media
+	 *	@param	string 			$lang_code
+	 *	@param	array 			$translation_group
 	 *	@return	object	WP_Post
 	 */
 	private function get_translated_media( $media, $lang_code, &$translation_group ) {
 
 		$media = get_post( is_array($media) ? $media['ID'] : $media->ID );
-		
+
 
 		// found translation?
 		if ( $translated_media_id = pll_get_post( $media->ID, $lang_code ) ) {
 			if ( $translated_media = get_post( $translated_media_id ) ) {
-			
+
 				$translation_group[ $lang_code ] = $translated_media_id;
 
 				return $translated_media;
@@ -365,7 +411,7 @@ class Sync extends Core\Singleton {
 					update_post_meta( $translated_media_id , $meta_key , maybe_unserialize( $value ) );
 				}
 			}
-			
+
 			$translation_group[ $lang_code ] = $translated_media_id;
 
 			$translated_media = get_post( $translated_media_id );
@@ -379,6 +425,10 @@ class Sync extends Core\Singleton {
 		return $media;
 	}
 
+	/**
+	 *	@param	array	$field_object
+	 *	@param	array	$translation_group
+	 */
 	private function update_gallery( $field_object, $translation_group ) {
 
 		$media_translation_groups = array();
@@ -396,7 +446,7 @@ class Sync extends Core\Singleton {
 					$media_obj = (object) $image;
 
 					$source_lang = pll_get_post_language( $media_obj->ID, 'slug' );
-		
+
 					$media_translation_groups[$i] = array( $source_lang => $media_obj->ID );
 
 					$gallery[$i] = $this->get_translated_media( $media_obj->ID, $lang_code, $media_translation_groups[$i] );
@@ -409,12 +459,19 @@ class Sync extends Core\Singleton {
 
 			$this->update_field( $field_object['key'], $field_object['value'], $post_id );
 		}
-		
+
 		foreach ( $media_translation_groups as $translation_group ) {
 			pll_save_post_translations( $translation_group );
 		}
 	}
 
+	/**
+	 *	Wrapper around acf update_field()
+	 *
+	 *	@param	string	$selector
+	 *	@param	mixed	$value
+	 *	@param	int		$post_id
+	 */
 	private function update_field( $selector, $value, $post_id ) {
 		$res = update_field( $selector, $value, $post_id );
 		return $res;

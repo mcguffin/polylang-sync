@@ -1,6 +1,11 @@
 <?php
 
 namespace PolylangSync\Taxonomy;
+
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
 use PolylangSync\Core;
 use PolylangSync\Ajax;
 
@@ -35,5 +40,4 @@ class Taxonomy extends Core\Singleton {
 		}
 
 	}
-
 }

@@ -2,6 +2,11 @@
 
 namespace PolylangSync\AutoUpdate;
 
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
+
 class AutoUpdateGithub extends AutoUpdate {
 
 	private $github_repo = null;

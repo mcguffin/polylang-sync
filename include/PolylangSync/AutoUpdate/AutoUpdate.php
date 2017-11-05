@@ -2,6 +2,11 @@
 
 namespace PolylangSync\AutoUpdate;
 
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
+
 use PolylangSync\Core;
 
 abstract class AutoUpdate extends Core\Singleton {

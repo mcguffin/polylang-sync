@@ -2,6 +2,11 @@
 
 namespace ShippingClerk\Core;
 
+if ( ! defined('ABSPATH') ) {
+	die('FU!');
+}
+
+
 abstract class PluginComponent extends Singleton {
 
 	/**
