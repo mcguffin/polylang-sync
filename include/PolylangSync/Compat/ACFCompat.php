@@ -5,7 +5,7 @@ namespace PolylangSync\Compat;
 use PolylangSync\ACF;
 use PolylangSync\Core;
 
-class ACF extends Core\Singleton {
+class ACFCompat extends Core\Singleton {
 
 	private $core;
 
