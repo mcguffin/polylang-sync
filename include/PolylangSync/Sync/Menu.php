@@ -251,6 +251,7 @@ class Menu extends Core\Singleton {
 
 		load_default_textdomain();
 
+		// Manage adding and sorting
 		foreach ( $menu_items as $menu_item ) {
 
 			$menu_item_translation_group = get_post_meta( $menu_item->ID, 'polylang_sync_translation_group', true );
@@ -271,9 +272,10 @@ class Menu extends Core\Singleton {
 
 				// try to get menu item translation
 				if ( $translated_menu_item = $this->get_translated_menu_item( $menu_item, $lang_code ) ) {
-					// do something...?
+					// item found, update it.
 					$this->update_menu_item( $menu_item, $lang_code, $translated_menu_item, $menu_translation_group[ $lang_code ] );
 				} else {
+					// no item found, create one
 					$translated_menu_item_id = $this->translate_menu_item( $menu_item, $lang_code, $menu_translation_group[ $lang_code ] );
 					$translated_menu_item = get_post( $translated_menu_item_id );
 				}
@@ -284,6 +286,21 @@ class Menu extends Core\Singleton {
 
 			$this->update_menu_item_translation_group( $menu_item->ID, $menu_item_translation_group );
 
+		}
+
+		// manage delete
+		foreach ( $menu_translation_group as $lang_code => $translated_menu_id ) {
+			if ( $lang_code == $menu_language ) {
+				continue;
+			}
+			// get menu Items
+			$menu_items 	= wp_get_nav_menu_items( $translated_menu_id );
+			// delete the ones without translation.
+			foreach ( $menu_items as $item ) {
+				if ( false === $this->get_translated_menu_item( $item, $menu_language ) ) {
+					wp_delete_post( $item->ID, true );
+				}
+			}
 		}
 		remove_filter( 'locale', array( $this, 'locale' ) );
 	}
@@ -566,7 +583,7 @@ class Menu extends Core\Singleton {
 	/**
 	 *	Get menu Translation group.
 	 *	First tries to get it from term_meta
-	 *	Then tries to get
+	 *	Then tries to get from pll options.
 	 *
 	 *	@param	int	$nav_menu_id
 	 *
