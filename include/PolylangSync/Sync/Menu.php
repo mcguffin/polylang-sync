@@ -88,13 +88,7 @@ class Menu extends Core\Singleton {
 
 		$asset_id	= 'polylang_sync_nav_menus';
 
-		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$js_src		= 'js/admin/nav-menus.js';
-		} else {
-			$js_src		= 'js/admin/nav-menus.min.js';
-		}
-
-		wp_enqueue_script( $asset_id , $this->core->get_asset_url( $js_src ), array('jquery') );
+		wp_enqueue_script( $asset_id , $this->core->get_asset_url( 'js/admin/nav-menus.js' ), array('jquery') );
 		wp_localize_script( $asset_id , 'polylang_sync_nav_menus' , array(
 		) );
 	}

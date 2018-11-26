@@ -42,12 +42,7 @@ class ACFTranslate extends Core\Singleton {
 	 *	@action load-post-new.php
 	 */
 	public function enqueue_assets() {
-		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$css_src = '/css/admin/post.css';
-		} else {
-			$css_src = '/css/admin/post.min.css';
-		}
-		wp_enqueue_style( 'polylang_sync-admin-post' , $this->core->get_asset_url( $css_src ), array('acf-input') );
+		wp_enqueue_style( 'polylang_sync-admin-post' , $this->core->get_asset_url( '/css/admin/post.css' ), array('acf-input') );
 	}
 
 	/**
