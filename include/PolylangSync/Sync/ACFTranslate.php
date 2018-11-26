@@ -195,7 +195,7 @@ class ACFTranslate extends Core\Singleton {
 	 *	Get Supported ACF fields
 	 */
 	public function get_supported_fields() {
-		return apply_filters( 'polylang_acf_sync_supported_fields', array(
+		return apply_filters( 'polylang_acf_sync_translate_supported_fields', array(
 			// basic
 			'text',
 			'textarea',
