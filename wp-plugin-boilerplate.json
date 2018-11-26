@@ -1,0 +1,18 @@
+{
+  "modules": {
+    "admin": {
+      "css": true,
+      "js": true
+    },
+    "compat": {},
+    "git": {},
+    "gulp": {}
+  },
+  "plugin_author": "J\u00f6rn Lund",
+  "plugin_author_uri": "",
+  "plugin_name": "Ternum DS",
+  "plugin_namespace": "TernumDs",
+  "plugin_slug": "ternum_ds",
+  "this_year": 2018,
+  "wp_plugin_slug": "ternum-ds"
+}

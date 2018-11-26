@@ -17,11 +17,10 @@
   },
   "homepage": "https://github.com/mcguffin/acf-polylang-sync#readme",
   "devDependencies": {
-    "gulp": "*",
+    "gulp": "^4.0.0",
     "gulp-autoprefixer": "*",
     "gulp-concat": "*",
     "gulp-rename": "*",
-    "gulp-replace": "^0.6.1",
     "gulp-sass": "*",
     "gulp-sourcemaps": "*",
     "gulp-uglify": "*",

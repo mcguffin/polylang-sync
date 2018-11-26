@@ -1,4 +1,9 @@
 <?php
+/**
+ *	@package TernumDs
+ *	@version 1.0.0
+ *	2018-09-22
+ */
 
 namespace PolylangSync;
 
@@ -8,12 +13,20 @@ if ( ! defined('ABSPATH') ) {
 
 
 function __autoload( $class ) {
-	if ( strpos( $class, 'PolylangSync\\' ) === false ) {
+
+	if ( false === ( $pos = strpos( $class, '\\' ) ) ) {
+		return;
+	}
+
+	$ds = DIRECTORY_SEPARATOR;
+	$top = substr( $class, 0, $pos );
+
+	if ( false === is_dir( __DIR__ .$ds . $top ) ) {
 		// not our plugin.
 		return;
 	}
-	$ds = DIRECTORY_SEPARATOR;
-	$file = POLYLANG_SYNC_DIRECTORY . 'include' . $ds . str_replace( '\\', $ds, $class ) . '.php';
+
+	$file = __DIR__ . $ds . str_replace( '\\', $ds, $class ) . '.php';
 
 	if ( file_exists( $file ) ) {
 		require_once $file;

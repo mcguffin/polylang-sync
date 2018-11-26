@@ -13,18 +13,83 @@ class Plugin extends Singleton {
 	private static $components = array(
 	);
 
-	/**
-	 *	Private constructor
-	 */
-	protected function __construct() {
 
-		register_activation_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'activate' ) );
-		register_deactivation_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'deactivate' ) );
-		register_uninstall_hook( POLYLANG_SYNC_FILE, array( __CLASS__ , 'uninstall' ) );
+	/**
+	 *	@inheritdoc
+	 */
+	protected function __construct( $file ) {
+		if ( ! $file ) {
+			throw new \Exception('Missing $file argument');
+		}
+		$this->plugin_file = $file;
+
+		register_activation_hook( $this->get_plugin_file(), array( $this , 'activate' ) );
+		register_deactivation_hook( $this->get_plugin_file(), array( $this , 'deactivate' ) );
+		register_uninstall_hook( $this->get_plugin_file(), array( __CLASS__, 'uninstall' ) );
 
 		add_action( 'admin_init', array( $this, 'maybe_upgrade' ) );
+		add_filter( 'extra_plugin_headers', array( $this, 'add_plugin_header' ) );
+
+		add_action( 'plugins_loaded' , array( $this , 'load_textdomain' ) );
 
 		parent::__construct();
+	}
+
+	/**
+	 *	@filter extra_plugin_headers
+	 */
+	public function add_plugin_header( $headers ) {
+		$headers['GithubRepo'] = 'Github Repository';
+		return $headers;
+	}
+
+	/**
+	 *	@return string full plugin file path
+	 */
+	public function get_plugin_file() {
+		return $this->plugin_file;
+	}
+
+	/**
+	 *	@return string full plugin file path
+	 */
+	public function get_plugin_dir() {
+		return plugin_dir_path( $this->get_plugin_file() );
+	}
+
+	/**
+	 *	@return string plugin slug
+	 */
+	public function get_slug() {
+		return basename( $this->get_plugin_dir() );
+	}
+
+	/**
+	 *	@return string Path to the main plugin file from plugins directory
+	 */
+	public function get_wp_plugin() {
+		return plugin_basename( $this->get_plugin_file() );
+	}
+
+	/**
+	 *	@return string current plugin version
+	 */
+	public function get_version() {
+		return $this->get_plugin_meta( 'Version' );
+	}
+
+	/**
+	 *	@param string $which Which plugin meta to get. NUll
+	 *	@return string|array plugin meta
+	 */
+	public function get_plugin_meta( $which = null ) {
+		if ( ! isset( $this->plugin_meta ) ) {
+			$this->plugin_meta = get_plugin_data( $this->get_plugin_file() );
+		}
+		if ( isset( $this->plugin_meta[ $which ] ) ) {
+			return $this->plugin_meta[ $which ];
+		}
+		return $this->plugin_meta;
 	}
 
 	/**
@@ -32,37 +97,43 @@ class Plugin extends Singleton {
 	 */
 	public function maybe_upgrade() {
 		// trigger upgrade
-		$meta = get_plugin_data( POLYLANG_SYNC_FILE );
-		$new_version = $meta['Version'];
-		$old_version = get_site_option( 'polylang_sync_version' );
+		$new_version = $this->get_version();
+		$old_version = get_site_option( 'ternum_ds_version' );
 
 		// call upgrade
 		if ( version_compare($new_version, $old_version, '>' ) ) {
 
 			$this->upgrade( $new_version, $old_version );
 
-			update_site_option( 'polylang_sync_version', $new_version );
+			update_site_option( 'ternum_ds_version', $new_version );
 
 		}
 
 	}
 
 	/**
+	 *	Load text domain
+	 *
+	 *  @action plugins_loaded
+	 */
+	public function load_textdomain() {
+		$path = pathinfo( $this->get_plugin_file(), PATHINFO_FILENAME );
+		load_plugin_textdomain( 'ternum-ds', false, $path . '/languages' );
+	}
+
+
+
+	/**
 	 *	Fired on plugin activation
 	 */
-	public static function activate() {
+	public function activate() {
 
-		$meta = get_plugin_data( POLYLANG_SYNC_FILE );
-		$new_version = $meta['Version'];
-
-		update_site_option( 'polylang_sync_version', $new_version );
+		$this->maybe_upgrade();
 
 		foreach ( self::$components as $component ) {
 			$comp = $component::instance();
 			$comp->activate();
 		}
-
-
 	}
 
 
@@ -96,7 +167,7 @@ class Plugin extends Singleton {
 	/**
 	 *	Fired on plugin deactivation
 	 */
-	public static function deactivate() {
+	public function deactivate() {
 		foreach ( self::$components as $component ) {
 			$comp = $component::instance();
 			$comp->deactivate();
@@ -112,5 +183,4 @@ class Plugin extends Singleton {
 			$comp->unistall();
 		}
 	}
-
 }

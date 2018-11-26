@@ -145,6 +145,7 @@ class ACF extends Core\Singleton {
 			$field	= get_field_object( $post->post_name );
 
 			if ( isset( $field['polylang_sync'] ) && $field['polylang_sync'] && ! acf_is_sub_field( $field ) ) {
+				add_filter( "acf/prepare_field/key={$field['key']}", array( $this, 'prepare_field' ) );
 				$this->sync_acf_fields[] = $field;
 			}
 		}
@@ -153,10 +154,21 @@ class ACF extends Core\Singleton {
 
 
 	/**
+	 *	Display translated value of field
+	 *
+	 *	@filter  "acf/prepare_field/key={$field['key']}"
+	 */
+	public function prepare_field( $field ) {
+		$field['wrapper']['class'] .= ' pll-sync';
+		return $field;
+	}
+	/**
 	 *	@action pll_save_post
 	 */
 	public function pll_save_post( $source_post_id, $source_post, $translation_group ) {
+		do_action( 'pll_sync_begin_sync_acf' );
 		$this->update_fields( $this->sync_acf_fields, $source_post_id, $translation_group );
+		do_action( 'pll_sync_end_sync_acf' );
 	}
 
 
@@ -282,12 +294,21 @@ class ACF extends Core\Singleton {
 							break;
 						case 'taxonomy':
 							break;
+						case 'text':
+						case 'textarea':
+							$value = pll_translate_string( $value, $lang_code );
+							break;
 					}
+					// $value = apply_filters( "acf/update_value/type={$sub_field['type']}", $value, $post_id, $sub_field  );
+					// $value = apply_filters( "acf/update_value/key={$sub_field['key']}",   $value, $post_id, $sub_field  );
+					// $value = apply_filters( "acf/update_value",                           $value, $post_id, $sub_field  );
 				}
 				$translated_values[ $field_key ] = $value;
 			}
-			$this->update_field( $field_object['key'], $translated_values, $post_id );
+
+			$res = $this->update_field( $field_object['key'], $translated_values, $post_id );
 		}
+
 	}
 
 	/**
@@ -338,7 +359,6 @@ class ACF extends Core\Singleton {
 	 *	@param	array 	$translation_group	PLL Translation group
 	 */
 	private function update_upload( $field_object, $translation_group ) {
-
 
 		$media_obj = (object) $field_object['value'];
 		$source_lang = pll_get_post_language( $media_obj->ID, 'slug' );
@@ -473,8 +493,7 @@ class ACF extends Core\Singleton {
 	 *	@param	int		$post_id
 	 */
 	private function update_field( $selector, $value, $post_id ) {
-		$res = update_field( $selector, $value, $post_id );
-		return $res;
+		return update_field( $selector, $value, $post_id );
 	}
 
 

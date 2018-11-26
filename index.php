@@ -3,6 +3,7 @@
 /*
 Plugin Name: Polylang Sync
 Plugin URI: https://github.com/mcguffin/polylang-sync
+Github Plugin URI: polylang-sync
 Description: Keep Menus, ACF-Fields and more in Sync on your Polylang-Powered multilingual WordPress-Site.
 Author: Jörn Lund
 Version: 0.0.2
@@ -42,23 +43,28 @@ if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'include/autoload.php';
 
-define( 'POLYLANG_SYNC_FILE', __FILE__ );
-define( 'POLYLANG_SYNC_DIRECTORY', plugin_dir_path(__FILE__) );
+Core\Core::instance( __FILE__ );
 
-require_once POLYLANG_SYNC_DIRECTORY . 'include/vendor/autoload.php';
-
-Core\Core::instance();
 
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
-	// don't WP-Update actual repos!
-	if ( ! file_exists( ACFQUICKEDIT_DIRECTORY . '/.git/' ) ) {
-		AutoUpdate\AutoUpdateGithub::instance();
-	}
-
-//	Admin\Admin::instance();
-
 	Settings\SettingsPagePolylangSync::instance();
+
+	// don't WP-Update actual repos!
+	if ( ! file_exists( plugin_dir_path(__FILE__) . '/.git/' ) ) {
+
+		// not a git. Check if https://github.com/afragen/github-updater is active. (function is_plugin_active not available yet)
+		$active_plugins = get_option('active_plugins');
+		if ( $sitewide_plugins = get_site_option('active_sitewide_plugins') ) {
+			$active_plugins = array_merge( $active_plugins, array_keys( $sitewide_plugins ) );
+		}
+
+		if ( ! in_array( 'github-updater/github-updater.php', $active_plugins ) ) {
+			// not github updater. Init our our own...
+			AutoUpdate\AutoUpdateGithub::instance();
+		}
+	}
 
 }

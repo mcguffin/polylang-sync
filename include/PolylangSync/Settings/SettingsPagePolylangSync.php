@@ -7,7 +7,6 @@ if ( ! defined('ABSPATH') ) {
 }
 
 use PolylangSync\Ajax;
-use PolylangSync\Core;
 use PolylangSync\Taxonomy;
 
 
@@ -27,7 +26,7 @@ class SettingsPagePolylangSync extends Settings {
 
 		add_option( 'polylang_sync_term_meta' , array() , '' , False );
 
-		add_action( 'admin_menu', array( &$this, 'admin_menu' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 
 		$this->ajax_sync_handler = Ajax\Ajax::register_action( 'sync-taxonomy', array(
 			'capability'	=> 'manage_options',
