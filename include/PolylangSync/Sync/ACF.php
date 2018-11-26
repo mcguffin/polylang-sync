@@ -13,7 +13,9 @@ class ACF extends Core\Singleton {
 
 	private $core;
 
-	private $sync_acf_fields;
+	private $sync_acf_fields = null;
+
+	private $all_fields = null;
 
 	private $in_sub_field_loop = false;
 
@@ -88,40 +90,58 @@ class ACF extends Core\Singleton {
 	 */
 	public function render_acf_settings( $field ) {
 
-		$post = get_post( $field['ID'] );
-
-		if ( $post ) {
-
-			if ( acf_is_sub_field( $field ) ) {
-				return;
-			}
-
-			$instructions = '';
-
-			if ( $field['type'] === 'taxonomy' ) {
-				/*
-				Polylang-Sync AN:
-
-				Polylang-Sync AUS:
-
-				*/
-				$instructions = __( 'Enabling this field only makes sense if...', 'polylang-sync' );
-			}
-
-			// show column: todo: allow sortable
-			acf_render_field_setting( $field, array(
-				'label'			=> __( 'Synchronize', 'polylang-sync' ),
-				'instructions'	=> '',
-				'type'			=> 'true_false',
-				'name'			=> 'polylang_sync',
-				'message'		=> __( 'Synchronize this field between translations', 'polylang-sync' ),
-				'width'			=> 50,
-				'ui'			=> true,
-			));
+		if ( acf_is_sub_field( $field ) ) {
+			return;
 		}
+
+		$instructions = '';
+
+		if ( $field['type'] === 'taxonomy' ) {
+			/*
+			Polylang-Sync AN:
+
+			Polylang-Sync AUS:
+
+			*/
+			$instructions = __( 'Enabling this field only makes sense if...', 'polylang-sync' );
+		}
+
+		// show column: todo: allow sortable
+		acf_render_field_setting( $field, array(
+			'label'			=> __( 'Synchronize', 'polylang-sync' ),
+			'instructions'	=> '',
+			'type'			=> 'true_false',
+			'name'			=> 'polylang_sync',
+			'message'		=> __( 'Synchronize this field between translations', 'polylang-sync' ),
+			'width'			=> 50,
+			'ui'			=> true,
+		));
 	}
 
+	public function all_fields() {
+		if ( is_null( $this->all_fields ) ) {
+			$this->all_fields = array();
+			$groups = acf_get_field_groups();
+			foreach ( $groups as $group ) {
+				$this->add_sub_fields( acf_get_fields( $group['key'] ) );
+			}
+		}
+		return $this->all_fields;
+	}
+	private function add_sub_fields( $sub_fields ) {
+		foreach ( $sub_fields as $field ) {
+			$this->all_fields[] = $field;
+			if ( $field['type'] === 'group' ) {
+				$this->add_sub_fields($field['sub_fields']);
+			} else if ( $field['type'] === 'repeater' ) {
+				$this->add_sub_fields($field['sub_fields']);
+			} else if ( $field['type'] === 'flexible_content' ) {
+				// not supported yet....
+				//vaR_dump($field);
+			}
+		}
 
+	}
 
 	/**
 	 *	@action init
@@ -131,19 +151,9 @@ class ACF extends Core\Singleton {
 		// get top level fields to sync
 		$this->sync_acf_fields = array();
 
-		$all_acf_fields = get_posts(array(
-			'post_type' => 'acf-field',
-			'posts_per_page' => -1,
-		));
+		$all_acf_fields = $this->all_fields();
 
-		foreach( $all_acf_fields as $post ) {
-/*
-			if ( ! $this->is_repeater_child( $post ) ) {
-				continue;
-			}
-*/
-
-			$field	= get_field_object( $post->post_name );
+		foreach( $all_acf_fields as $field ) {
 
 			if ( isset( $field['polylang_sync'] ) && $field['polylang_sync'] && ! acf_is_sub_field( $field ) ) {
 				add_filter( "acf/prepare_field/key={$field['key']}", array( $this, 'prepare_field' ) );

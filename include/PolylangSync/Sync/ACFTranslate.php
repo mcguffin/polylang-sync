@@ -56,20 +56,14 @@ class ACFTranslate extends Core\Singleton {
 		$this->translated_acf_fields = [];
 
 		// get all fields
-		$all_acf_fields	= get_posts( array(
-			'post_type' => 'acf-field',
-			'posts_per_page' => -1,
-		));
+		$all_acf_fields	= ACF::instance()->all_fields();
 
 		$default_lang = PLL()->model->get_language( PLL()->options['default_lang'] );
 		$field_keys		= array();
 		$field_groups	= array();
 
 		// Gather translated fields
-		foreach( $all_acf_fields as $post ) {
-
-			$field	= get_field_object( $post->post_name );
-
+		foreach( $all_acf_fields as $field ) {
 			if ( isset( $field['polylang_translate'] ) && $field['polylang_translate'] ) {
 				add_filter( "acf/prepare_field/key={$field['key']}", array( $this, 'prepare_field' ) );
 				add_filter( "acf/format_value/key={$field['key']}", 'pll__' );
@@ -81,8 +75,11 @@ class ACFTranslate extends Core\Singleton {
 				if ( ! isset( $field_groups[ $field['key'] ] ) ) {
 					 $field_groups[ $field['key'] ]	= $this->get_field_group( $field['parent'] );
 				}
-
 			}
+		}
+		// no translated fields
+		if ( ! count( $field_keys ) ) {
+			return;
 		}
 
 		// only insert from default language
@@ -93,7 +90,6 @@ class ACFTranslate extends Core\Singleton {
 					INNER JOIN $wpdb->term_relationships AS t
 						ON m1.post_id = t.object_id AND t.term_taxonomy_id = %d
 					WHERE m1.meta_value in (".implode(',', array_fill(0, count( $field_keys ), '%s')).")";
-
 
 
 		$sql = call_user_func_array(
@@ -234,23 +230,18 @@ class ACFTranslate extends Core\Singleton {
 	 */
 	public function render_acf_settings( $field ) {
 
-		$post = get_post( $field['ID'] );
+		$instructions = '';
 
-		if ( $post ) {
-
-			$instructions = '';
-
-			// show column: todo: allow sortable
-			acf_render_field_setting( $field, array(
-				'label'			=> __( 'Translatable', 'polylang-sync' ),
-				'instructions'	=> '',
-				'type'			=> 'true_false',
-				'name'			=> 'polylang_translate',
-				'message'		=> __( 'Translate this field through Polylang strings', 'polylang-sync' ),
-				'width'			=> 50,
-				'ui'			=> true,
-			));
-		}
+		// show column: todo: allow sortable
+		acf_render_field_setting( $field, array(
+			'label'			=> __( 'Translatable', 'polylang-sync' ),
+			'instructions'	=> '',
+			'type'			=> 'true_false',
+			'name'			=> 'polylang_translate',
+			'message'		=> __( 'Translate this field through Polylang strings', 'polylang-sync' ),
+			'width'			=> 50,
+			'ui'			=> true,
+		));
 	}
 
 
