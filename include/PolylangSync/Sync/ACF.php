@@ -116,6 +116,7 @@ class ACF extends Core\Singleton {
 				'name'			=> 'polylang_sync',
 				'message'		=> __( 'Synchronize this field between translations', 'polylang-sync' ),
 				'width'			=> 50,
+				'ui'			=> true,
 			));
 		}
 	}

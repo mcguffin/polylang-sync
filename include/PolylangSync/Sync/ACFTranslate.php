@@ -248,6 +248,7 @@ class ACFTranslate extends Core\Singleton {
 				'name'			=> 'polylang_translate',
 				'message'		=> __( 'Translate this field through Polylang strings', 'polylang-sync' ),
 				'width'			=> 50,
+				'ui'			=> true,
 			));
 		}
 	}
