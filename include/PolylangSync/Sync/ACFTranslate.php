@@ -78,7 +78,7 @@ class ACFTranslate extends Core\Singleton {
 			if ( isset( $field['polylang_translate'] ) && $field['polylang_translate'] ) {
 				add_filter( "acf/prepare_field/key={$field['key']}", array( $this, 'prepare_field' ) );
 				add_filter( "acf/format_value/key={$field['key']}", 'pll__' );
-				add_filter( "acf/update_value/key={$field['key']}", array( $this, 'update_value'), 10, 3 );
+			//	add_filter( "acf/update_value/key={$field['key']}", array( $this, 'update_value'), 10, 3 );
 
 				$this->translated_acf_fields[] = $field;
 				$field_keys[ $field['key'] ] = $field;
@@ -142,9 +142,8 @@ class ACFTranslate extends Core\Singleton {
 				$lang_obj->flag,
 				$mo->translate( $field['value'] )
 			);
-			$field['wrapper']['class'] .= ' pll-sync-translated';
-//			$field['append'] = $link .' ' . $mo->translate( $field['value'] );
 		}
+		$field['wrapper']['class'] .= ' pll-sync-translated';
 		return $field;
 	}
 

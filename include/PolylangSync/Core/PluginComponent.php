@@ -1,6 +1,6 @@
 <?php
 
-namespace ShippingClerk\Core;
+namespace PolylangSync\Core;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
