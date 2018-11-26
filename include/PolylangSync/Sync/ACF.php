@@ -191,7 +191,7 @@ class ACF extends Core\Singleton {
 	private function update_fields( $fields, $source_post_id, $translation_group ) {
 		foreach ( $fields as $synced_field ) {
 
-			$field_object = get_field_object( $synced_field['key'], $source_post_id );
+			$field_object = get_field_object( $synced_field['key'], $source_post_id, false, true );
 
 			switch ( $synced_field['type'] ) {
 				case 'image':
