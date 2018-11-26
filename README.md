@@ -9,9 +9,14 @@ Keep [ACF-Pro](https://www.advancedcustomfields.com) Fields in Sync on your
  - Requires PHP 5.6+, [ACF 5+](https://www.advancedcustomfields.com/pro) and [Polylang](http://polylang.wordpress.com)
  - Developed and Tested With WP 4.7.2 - 4.9.8, Polylang 2.1 - 2.4, ACF Pro 5.5.5 - 5.7
 
+Development Status
+------------------
 
- Features:
- ---------
+This plugin is still under heavy development. Please do not expect it to be stable and harmless in any way. If you encounter an Issue please don't hesitate to report it in the issues tab.
+
+
+Features:
+---------
   - WordPress
   	- Sync Terms
   	- Sync Menus
