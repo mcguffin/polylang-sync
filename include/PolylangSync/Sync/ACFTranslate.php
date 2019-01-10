@@ -211,9 +211,8 @@ class ACFTranslate extends Core\Singleton {
 	private function get_field_group( $parent ) {
 
 		while ( true ) {
-
-			if ( acf_is_field_group_key( $parent ) ) {
-				return acf_get_field_group( $parent );
+			if ( $group = acf_get_field_group( $parent ) ) {
+				return $group;
 			}
 			if ( ! $field = acf_get_field( $parent )) {
 				return false;
