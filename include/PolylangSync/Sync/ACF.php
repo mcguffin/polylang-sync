@@ -78,8 +78,9 @@ class ACF extends Core\Singleton {
 			'time_picker',
 			'color_picker',
 
-			// relational
+			// layout
 			'repeater',
+            'group'
 		));
 	}
 
