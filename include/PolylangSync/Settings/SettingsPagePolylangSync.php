@@ -7,7 +7,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 use PolylangSync\Ajax;
-use PolylangSync\Taxonomy;
+use PolylangSync\Sync;
 
 
 class SettingsPagePolylangSync extends Settings {
@@ -38,7 +38,7 @@ class SettingsPagePolylangSync extends Settings {
 	}
 
 	public function ajax_sync_taxonomies( $params ) {
-		$sync = Taxonomy\Sync::instance();
+		$sync = Sync\Taxonomy::instance();
 		$taxonomies = get_option( 'polylang_sync_taxonomies' );
 
 		foreach ( $taxonomies as $taxonomy ) {
