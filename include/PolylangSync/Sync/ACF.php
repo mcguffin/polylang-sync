@@ -399,14 +399,14 @@ class ACF extends Core\Singleton {
 	}
 
 	/**
-	 *	@param	WP_Post|array 	$media
+	 *	@param	WP_Post|array|int 	$media
 	 *	@param	string 			$lang_code
 	 *	@param	array 			$translation_group
 	 *	@return	object	WP_Post
 	 */
 	private function get_translated_media( $media, $lang_code, &$translation_group ) {
 
-		$media = get_post( is_array($media) ? $media['ID'] : $media->ID );
+		$media = get_post( is_numeric($media) ? intval($media): ( is_array($media) ? $media['ID'] : $media->ID ) );
 
 
 		// found translation?
@@ -469,19 +469,17 @@ class ACF extends Core\Singleton {
 
 			$gallery = false;
 
-			if ( $field_object["value"] ) {
+			if ( $field_object["value"] ) { // array containing the image IDs
 
 				$gallery = array();
 
-				foreach ( $field_object["value"] as $i => $image ) {
+				foreach ( $field_object["value"] as $i => $image_id ) {
 
-					$media_obj = (object) $image;
+					$source_lang = pll_get_post_language( $image_id, 'slug' );
 
-					$source_lang = pll_get_post_language( $media_obj->ID, 'slug' );
+					$media_translation_groups[$i] = array( $source_lang => $image_id );
 
-					$media_translation_groups[$i] = array( $source_lang => $media_obj->ID );
-
-					$gallery[$i] = $this->get_translated_media( $media_obj->ID, $lang_code, $media_translation_groups[$i] );
+					$gallery[$i] = $this->get_translated_media( $image_id, $lang_code, $media_translation_groups[$i] )->ID;
 
 				}
 
