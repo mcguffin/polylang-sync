@@ -52,6 +52,9 @@ class ACFTranslate extends Core\Singleton {
 
 		global $wpdb;
 
+		if ( ! function_exists( 'PLL' ) )
+			return; // Bail if PolyLang is not enabled (yet).
+
 		// get top level fields to sync
 		$this->translated_acf_fields = [];
 
