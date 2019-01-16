@@ -404,16 +404,16 @@ class ACF extends Core\Singleton {
 	 *	@param	array 			$translation_group
 	 *	@return	object	WP_Post
 	 */
-	private function get_translated_media( $media, $lang_code, &$translation_group ) {
+	private function get_translated_media( $media, $lang_code, &$media_translation_group ) {
 
-		$media = get_post( is_numeric($media) ? intval($media): ( is_array($media) ? $media['ID'] : $media->ID ) );
-
+		// make sure $media is a WP_Post
+		$media = get_post( is_numeric( $media ) ? intval( $media ) : ( is_array($media) ? $media['ID'] : $media->ID ) );
 
 		// found translation?
 		if ( $translated_media_id = pll_get_post( $media->ID, $lang_code ) ) {
 			if ( $translated_media = get_post( $translated_media_id ) ) {
 
-				$translation_group[ $lang_code ] = $translated_media_id;
+				$media_translation_group[ $lang_code ] = $translated_media_id;
 
 				return $translated_media;
 			}
@@ -430,6 +430,7 @@ class ACF extends Core\Singleton {
 		$post_arr['post_title'] 	.= sprintf( ' (%s)' , $lang->slug );
 
 		if ( $translated_media_id = wp_insert_post( $post_arr ) ) {
+
 			pll_set_post_language( $translated_media_id, $lang_code );
 
 			$ignore_meta_keys = array( '_edit_lock' , '_edit_last' );
@@ -437,16 +438,20 @@ class ACF extends Core\Singleton {
 			$meta = get_post_meta( $media->ID );
 
 			foreach ( $meta as $meta_key => $values ) {
-				if ( in_array( $meta_key , $ignore_meta_keys ) )
+
+				if ( in_array( $meta_key , $ignore_meta_keys ) ) {
 					continue;
+				}
+
 				foreach ( $values as $value ) {
 					update_post_meta( $translated_media_id , $meta_key , maybe_unserialize( $value ) );
 				}
 			}
 
-			$translation_group[ $lang_code ] = $translated_media_id;
+			$media_translation_group[ $lang_code ] = $translated_media_id;
 
 			$translated_media = get_post( $translated_media_id );
+			pll_save_post_translations( $media_translation_group );
 
 			if ( $translated_media ) {
 				return $translated_media;
@@ -488,10 +493,6 @@ class ACF extends Core\Singleton {
 			$field_object["value"] = $gallery;
 
 			$this->update_field( $field_object['key'], $field_object['value'], $post_id );
-		}
-
-		foreach ( $media_translation_groups as $translation_group ) {
-			pll_save_post_translations( $translation_group );
 		}
 	}
 
