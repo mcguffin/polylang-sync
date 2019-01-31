@@ -1,17 +1,17 @@
 <?php
 /**
- *	@package UniqueMedia\AutoUpdate
+ *	@package PolylangSync\AutoUpdate
  *	@version 1.0.0
  *	2018-09-22
  */
-namespace UniqueMedia\AutoUpdate;
+namespace PolylangSync\AutoUpdate;
 
 if ( ! defined('ABSPATH') ) {
 	die('FU!');
 }
 
 
-use UniqueMedia\Core;
+use PolylangSync\Core;
 
 abstract class AutoUpdate extends Core\Singleton {
 
@@ -21,7 +21,7 @@ abstract class AutoUpdate extends Core\Singleton {
 	protected $release_info = null;
 
 	/**
-	 *	@var UniqueMedia\Core\Core plugin core instance
+	 *	@var PolylangSync\Core\Core plugin core instance
 	 */
 	protected $core = null;
 
