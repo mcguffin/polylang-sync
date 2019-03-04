@@ -375,8 +375,11 @@ class ACF extends Core\Singleton {
 	 *	@param	array 	$translation_group	PLL Translation group
 	 */
 	private function update_upload( $field_object, $translation_group ) {
-
+		if ( ! $field_object['value'] ) {
+			return;
+		}
 		$media_obj = (object) $field_object['value'];
+
 		$source_lang = pll_get_post_language( $media_obj->ID, 'slug' );
 		$media_translation_group = array( $source_lang => $media_obj->ID );
 
