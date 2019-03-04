@@ -50,6 +50,7 @@ class ACF extends Core\Singleton {
 			'email',
 			'url',
 			'password',
+			'range',
 
 			// Content
 			'wysiwyg',
@@ -63,6 +64,7 @@ class ACF extends Core\Singleton {
 			'checkbox',
 			'radio',
 			'true_false',
+			'button_group',
 
 			// relational
 			'post_object',
