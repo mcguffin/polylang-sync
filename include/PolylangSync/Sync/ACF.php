@@ -93,7 +93,7 @@ class ACF extends Core\Singleton {
 	 */
 	public function render_acf_settings( $field ) {
 
-		if ( acf_is_sub_field( $field ) ) {
+		if ( $this->is_sub_field( $field ) ) {
 			return;
 		}
 
@@ -158,14 +158,16 @@ class ACF extends Core\Singleton {
 
 		foreach( $all_acf_fields as $field ) {
 
-			if ( isset( $field['polylang_sync'] ) && $field['polylang_sync'] && ! acf_is_sub_field( $field ) ) {
+			if ( isset( $field['polylang_sync'] ) && $field['polylang_sync'] && ! $this->is_sub_field( $field ) ) {
 				add_filter( "acf/prepare_field/key={$field['key']}", array( $this, 'prepare_field' ) );
 				$this->sync_acf_fields[] = $field;
 			}
 		}
 
 	}
-
+	public function is_sub_field( $field ) {
+		return !$field['parent'];
+	}
 
 	/**
 	 *	Display translated value of field
