@@ -5,7 +5,7 @@ Plugin Name: Polylang Sync
 Plugin URI: https://github.com/mcguffin/polylang-sync
 Description: Keep Menus, ACF-Fields and more in Sync on your Polylang-Powered multilingual WordPress-Site.
 Author: Jörn Lund
-Version: 0.0.11
+Version: 0.0.12
 Author URI: https://github.com/mcguffin/
 License: GPL3
 Github Repository: mcguffin/polylang-sync
