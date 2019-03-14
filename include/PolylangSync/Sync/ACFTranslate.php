@@ -31,8 +31,21 @@ class ACFTranslate extends Core\Singleton {
 			add_action( "acf/render_field_settings/type={$type}", array( $this, 'render_acf_settings' ) );
 		}
 
+		add_action( 'admin_menu', array( $this, 'admin_menu' ), 11 );
+
+
+
 		add_action( 'load-post.php', array( $this, 'enqueue_assets' ) );
 		add_action( 'load-post-new.php', array( $this, 'enqueue_assets' ) );
+	}
+
+
+	public function admin_menu() {
+		if ( ! current_user_can( 'manage_options' ) && ( $min_cap = get_option( 'polylang_sync_strings_capability' ) ) && current_user_can( $min_cap ) ) {
+			remove_menu_page( 'mlang' );
+			remove_submenu_page( 'mlang', 'mlang_strings');
+			add_menu_page( __( 'Strings translations', 'polylang' ), __( 'Strings translations', 'polylang' ), $min_cap, 'mlang_strings', array( PLL(), 'languages_page' ), 'dashicons-translation' );
+		}
 	}
 
 	/**
@@ -119,7 +132,7 @@ class ACFTranslate extends Core\Singleton {
 	 */
 	public function prepare_field( $field ) {
 
-		if ( $post = get_post() ) {
+		if ( $post = get_post() && current_user_can( get_option( 'polylang_sync_strings_capability' ) ) ) {
 			$lang = pll_get_post_language( $post->ID );
 			$lang_obj = PLL()->model->get_language( $lang );
 			$mo = $this->get_pll_mo( $lang );

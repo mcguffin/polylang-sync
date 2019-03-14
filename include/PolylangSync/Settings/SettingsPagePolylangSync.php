@@ -22,9 +22,11 @@ class SettingsPagePolylangSync extends Settings {
 	 */
 	protected function __construct() {
 
-		add_option( 'polylang_sync_taxonomies' , array() , '' , False );
+		add_option( 'polylang_sync_taxonomies' , array() , '' , false );
 
-		add_option( 'polylang_sync_term_meta' , array() , '' , False );
+		add_option( 'polylang_sync_term_meta' , array() , '' , false );
+
+		add_option( 'polylang_sync_strings_capability', 'manage_options', '' , false );
 
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 
@@ -96,10 +98,11 @@ class SettingsPagePolylangSync extends Settings {
 		$settings_section = 'polylang_sync_settings';
 
 		// more settings go here ...
-		register_setting( $this->optionset , 'polylang_sync_taxonomies' , array( &$this , 'sanitize_taxonomies' ) );
-		register_setting( $this->optionset , 'polylang_sync_term_meta' , array( &$this , 'sanitize_chackbox' ) );
+		register_setting( $this->optionset , 'polylang_sync_taxonomies', array( $this , 'sanitize_taxonomies' ) );
+		register_setting( $this->optionset , 'polylang_sync_term_meta', array( $this , 'sanitize_checkbox' ) );
+		register_setting( $this->optionset , 'polylang_sync_strings_capability', array( $this , 'sanitize_strings_cap' ) );
 
-		add_settings_section( $settings_section, __( 'Taxonomies',  'polylang-sync' ), array( &$this, 'sync_taxonomies_description' ), $this->optionset );
+		add_settings_section( $settings_section, __( 'Taxonomies',  'polylang-sync' ), array( $this, 'sync_taxonomies_description' ), $this->optionset );
 
 		// ... and here
 		add_settings_field(
@@ -126,6 +129,18 @@ class SettingsPagePolylangSync extends Settings {
 			$this->optionset,
 			$settings_section
 		);
+
+
+		add_settings_field(
+			'polylang_sync_strings_capability',
+			__( 'Strings Editing Capability', 'polylang-sync' ),
+			array( $this, 'setting_select_cap' ),
+			$this->optionset,
+			$settings_section
+		);
+
+
+
 	}
 
 	/**
@@ -138,6 +153,32 @@ class SettingsPagePolylangSync extends Settings {
 		</div>
 		<?php
 	}
+
+	/**
+	 *	add_settings_field callback
+	 */
+	public function setting_select_cap() {
+		$setting_name	= 'polylang_sync_strings_capability';
+		$setting 		= get_option( $setting_name );
+
+		$caps = array(
+			'manage_options' => __('Manage Options (Default)','polylang-sync'),
+			'publish_pages' => __('Publish Pages','polylang-sync'),
+			'publish_posts' => __('Publish Posts','polylang-sync'),
+		);
+		?>
+		<select name="<?php echo $setting_name ?>">
+			<?php
+				foreach( $caps as $cap => $label ) {
+					printf( '<option value="%s" %s>%s</option>', $cap, selected($cap,$setting,false),$label );
+
+				}
+			?>
+		</select>
+		<?php
+
+	}
+
 
 	public function setting_sync_taxonomies_now() {
 
@@ -183,6 +224,16 @@ class SettingsPagePolylangSync extends Settings {
 				</label><?php
 			}
 		}
+	}
+
+	public function sanitize_strings_cap( $value ) {
+		if ( in_array( $value, array(
+			'manage_options',
+			'publish_pages',
+			'publish_posts' ) ) ) {
+			return $value;
+		}
+		return 'manage_options';
 	}
 
 	/**
