@@ -34,6 +34,7 @@ class ACF extends Core\Singleton {
 		foreach ( $this->get_supported_fields() as $type ) {
 			add_action( "acf/render_field_settings/type={$type}" , array( $this, 'render_acf_settings' ) );
 		}
+
 	}
 
 	/**
@@ -158,13 +159,28 @@ class ACF extends Core\Singleton {
 
 		foreach( $all_acf_fields as $field ) {
 
-			if ( isset( $field['polylang_sync'] ) && $field['polylang_sync'] && ! $this->is_sub_field( $field ) ) {
-				add_filter( "acf/prepare_field/key={$field['key']}", array( $this, 'prepare_field' ) );
-				$this->sync_acf_fields[] = $field;
+			if ( isset( $field['polylang_sync'] ) && $field['polylang_sync'] ) {
+				if ( ! $this->is_sub_field( $field ) ) {
+					add_filter( "acf/prepare_field/key={$field['key']}", array( $this, 'prepare_field' ) );
+					$this->sync_acf_fields[] = $field;
+				}
+				if ( $field['type'] === 'repeater' ) {
+				//	add_filter( "acf/update_value/key={$field['key']}", array( $this, 'update_repeater_value' ), 10, 3 );
+				}
 			}
 		}
-
+//		add_filter('acf/validate_value', array($this,'validate_repeater_value'), 10, 4 );
 	}
+
+
+
+	/**
+	 *	@filter acf/update_value/key={$field['key']}
+	 */
+	public function update_repeater_value( $value, $post_id, $sub_field ) {
+		return $value;
+	}
+
 	public function is_sub_field( $field ) {
 		return !$field['parent'];
 	}
@@ -175,13 +191,16 @@ class ACF extends Core\Singleton {
 	 *	@filter  "acf/prepare_field/key={$field['key']}"
 	 */
 	public function prepare_field( $field ) {
+		//
 		$field['wrapper']['class'] .= ' pll-sync';
 		return $field;
 	}
+
 	/**
 	 *	@action pll_save_post
 	 */
 	public function pll_save_post( $source_post_id, $source_post, $translation_group ) {
+
 		do_action( 'pll_sync_begin_sync_acf' );
 		$this->update_fields( $this->sync_acf_fields, $source_post_id, $translation_group );
 		do_action( 'pll_sync_end_sync_acf' );
@@ -287,7 +306,6 @@ class ACF extends Core\Singleton {
 				$values[ get_row_index() ] = get_row( false );
 			}
 		}
-
 		// iter translated posts ...
 		foreach ( $translation_group as $lang_code => $post_id ) {
 			$translated_values = array_merge( $values, [] );
@@ -299,6 +317,10 @@ class ACF extends Core\Singleton {
 			foreach ( $translated_values as $field_key => $value ) {
 				// iter repeater fields ...
 				foreach ( $field_object['sub_fields'] as $sub_field ) {
+					$sub_field = wp_parse_args( $sub_field, array(
+						'polylang_sync' => 0,
+					));
+
 					switch ( $sub_field['type'] ) {
 						case 'image':
 						case 'file':
@@ -334,10 +356,8 @@ class ACF extends Core\Singleton {
 				}
 				$translated_values[ $field_key ] = $value;
 			}
-
 			$res = $this->update_field( $field_object['key'], $translated_values, $post_id );
 		}
-
 	}
 
 	/**
