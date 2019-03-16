@@ -55,22 +55,21 @@
 .acf-field.pll-sync > .acf-label  > label,
 .acf-field-repeater.pll-sync .acf-th {
 	&:before {
-		content:$dashicon-update;
+		content:$dashicon-translation;
 		font-family:dashicons;
-		font-size:20px;
+		font-size:25px;
 		font-weight: normal;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		display: inline-block;
 		vertical-align: middle;
-		color:#fff;
 		float:right;
 		width:20px;
 		height:20px;
 		line-height:20px;
 		text-align: center;
-		background: $wp-green;
-		border-radius: 50%;
+		background: #fff;
+		color: mix($wp-blue-light,$wp-gray-dark,30);
 
 	}
 }
