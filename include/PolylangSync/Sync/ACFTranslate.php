@@ -132,7 +132,7 @@ class ACFTranslate extends Core\Singleton {
 	 */
 	public function prepare_field( $field ) {
 
-		if ( $post = get_post() && current_user_can( get_option( 'polylang_sync_strings_capability' ) ) ) {
+		if ( ($post = get_post()) && current_user_can( get_option( 'polylang_sync_strings_capability' ) ) ) {
 			$lang = pll_get_post_language( $post->ID );
 			$lang_obj = PLL()->model->get_language( $lang );
 			$mo = $this->get_pll_mo( $lang );
