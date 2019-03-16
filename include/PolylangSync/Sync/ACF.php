@@ -185,10 +185,14 @@ class ACF extends Core\Singleton {
 		do_action( 'pll_sync_begin_sync_acf' );
 		$this->update_fields( $this->sync_acf_fields, $source_post_id, $translation_group );
 		do_action( 'pll_sync_end_sync_acf' );
+		// exec only once!
+		remove_action( 'pll_save_post', array( $this, 'pll_save_post'), 20 );
 	}
 
 
 	/**
+	 *	@calledby pll_save_post()
+	 *
 	 *	@param	array	$fields				ACF Field objects
 	 *	@param	int		$source_post_id		ACF Field objects
 	 *	@param	array	$translation_group	PLL translation group
@@ -268,6 +272,7 @@ class ACF extends Core\Singleton {
 
 	/**
 	 *	Called when a repeater field is updated.
+	 *	@calledby update_fields()
 	 *
 	 *	@param	array 	$field_object		ACF Field object
 	 *	@param	array 	$translation_group	PLL Translation group
@@ -275,6 +280,7 @@ class ACF extends Core\Singleton {
 	 */
 	private function update_repeater( $field_object, $translation_group, $source_post_id ) {
 		$values = [];
+		// get source post repeater rows
 		if ( have_rows( $field_object['name'] ) ) {
 			while ( have_rows( $field_object['name'] ) ) {
 				the_row();
@@ -282,9 +288,16 @@ class ACF extends Core\Singleton {
 			}
 		}
 
+		// iter translated posts ...
 		foreach ( $translation_group as $lang_code => $post_id ) {
 			$translated_values = array_merge( $values, [] );
+			// don't save post being edited
+			if ( $post_id === $source_post_id ) {
+				continue;
+			}
+			// iter repeater rows ...
 			foreach ( $translated_values as $field_key => $value ) {
+				// iter repeater fields ...
 				foreach ( $field_object['sub_fields'] as $sub_field ) {
 					switch ( $sub_field['type'] ) {
 						case 'image':
