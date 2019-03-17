@@ -213,9 +213,14 @@ class SettingsPagePolylangSync extends Settings {
 	public function setting_sync_taxonomies_ui( ) {
 		$setting_name	= 'polylang_sync_taxonomies';
 		$setting 		= get_option( $setting_name );
+		/*
 		$taxonomies		= get_taxonomies( array( 'public' => true ), 'objects' );
-
-		foreach ( $taxonomies as $taxonomy ) {
+		/*/
+		$taxonomies		= \PLL()->model->get_translated_taxonomies();
+		//*/
+		
+		foreach ( $taxonomies as $taxonomy_slug ) {
+			$taxonomy = get_taxonomy( $taxonomy_slug );
 			if ( \pll_is_translated_taxonomy( $taxonomy->name ) ) {
 	//
 				?><label>

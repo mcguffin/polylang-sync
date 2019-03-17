@@ -50,8 +50,6 @@ Core\Core::instance( __FILE__ );
 
 if ( is_admin() || defined( 'DOING_AJAX' ) ) {
 
-	Settings\SettingsPagePolylangSync::instance();
-
 	// don't WP-Update actual repos!
 	if ( ! file_exists( plugin_dir_path(__FILE__) . '/.git/' ) ) {
 

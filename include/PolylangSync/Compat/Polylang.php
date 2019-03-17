@@ -7,6 +7,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 use PolylangSync\Core;
+use PolylangSync\Settings;
 use PolylangSync\Sync;
 
 class Polylang extends Core\Singleton {
@@ -15,7 +16,11 @@ class Polylang extends Core\Singleton {
 	 *	@inheritdoc
 	 */
 	protected function __construct() {
+
 		add_action('pll_init', array( $this, 'pll_init') );
+
+		Settings\SettingsPagePolylangSync::instance();
+
 	}
 
 	/**
