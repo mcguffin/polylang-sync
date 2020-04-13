@@ -331,7 +331,7 @@ class ACF extends Core\Singleton {
 						case 'relationship':
 							$post = get_post( $value );
 							if ( pll_is_translated_post_type( $post->post_type ) ) {
-								$translated_post = get_translated_post( $post_id, $lang_code );
+								$translated_post = $this->get_translated_post( $post_id, $lang_code );
 							}
 							if ( $translated_post ) {
 								$value = $translated_post->ID;
