@@ -98,14 +98,14 @@ class Plugin extends Singleton {
 	public function maybe_upgrade() {
 		// trigger upgrade
 		$new_version = $this->get_version();
-		$old_version = get_site_option( 'ternum_ds_version' );
+		$old_version = get_site_option( 'poylang_sync_version' );
 
 		// call upgrade
 		if ( version_compare($new_version, $old_version, '>' ) ) {
 
 			$this->upgrade( $new_version, $old_version );
 
-			update_site_option( 'ternum_ds_version', $new_version );
+			update_site_option( 'poylang_sync_version', $new_version );
 
 		}
 
@@ -118,7 +118,7 @@ class Plugin extends Singleton {
 	 */
 	public function load_textdomain() {
 		$path = pathinfo( $this->get_plugin_file(), PATHINFO_FILENAME );
-		load_plugin_textdomain( 'ternum-ds', false, $path . '/languages' );
+		load_plugin_textdomain( 'poylang-sync', false, $path . '/languages' );
 	}
 
 
