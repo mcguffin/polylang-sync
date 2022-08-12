@@ -25,5 +25,26 @@
     "gulp-sourcemaps": "*",
     "gulp-uglify": "*",
     "gulp-util": "*"
+  },
+  "wporg": {
+    "steps": [
+      "build",
+      "git"
+    ],
+    "type": "plugin",
+    "build": {
+      "prebuild": [
+        "wp i18n make-pot . languages/polylang-sync.pot --domain=polylang-sync --exclude=tmp"
+      ],
+      "build": []
+    },
+    "git": {
+      "host": "github.com",
+      "user": "mcguffin"
+    },
+    "wporg": {
+      "assets": ".wporg",
+      "svn_user": "podpirate"
+    }
   }
 }
