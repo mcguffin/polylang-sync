@@ -27,6 +27,9 @@ class Core extends Plugin {
 	 *  @action plugins_loaded
 	 */
 	public function init_compat() {
+
+		require_once $this->get_plugin_dir() . '/include/legacy.php';
+
 		if ( class_exists( 'Polylang' ) ) {
 			Compat\Polylang::instance();
 		}
