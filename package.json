@@ -1,6 +1,6 @@
 {
   "name": "acf-polylang-sync",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Filling the gaps that Polylang leaves.",
   "main": "js/wp-robocrop.combined.min.js",
   "scripts": {
@@ -33,6 +33,7 @@
     ],
     "type": "plugin",
     "build": {
+      "versionedFiles": null,
       "prebuild": [
         "wp i18n make-pot . languages/polylang-sync.pot --domain=polylang-sync --exclude=tmp"
       ],
