@@ -1,5 +1,4 @@
 (function($){
-	console.log('Hier!')
 	$(document).ready(function(){
 		$('#post-body').append( $('#translate-nav-menu') );
 		$(document).on('click','#translate-nav-menu button',function(e) {

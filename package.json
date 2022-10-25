@@ -4,7 +4,8 @@
   "description": "Filling the gaps that Polylang leaves.",
   "main": "js/wp-robocrop.combined.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+      "dev": "gulp dev",
+      "dev-test": "./src/run/dev-test.sh"
   },
   "repository": {
     "type": "git",
@@ -16,15 +17,34 @@
     "url": "https://github.com/mcguffin/acf-polylang-sync/issues"
   },
   "homepage": "https://github.com/mcguffin/acf-polylang-sync#readme",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "browserify-shim": {
+    "jquery": "global:jQuery",
+    "backbone": "global:Backbone"
+  },
   "devDependencies": {
-    "gulp": "^4.0.0",
-    "gulp-autoprefixer": "*",
-    "gulp-concat": "*",
-    "gulp-rename": "*",
-    "gulp-sass": "*",
-    "gulp-sourcemaps": "*",
-    "gulp-uglify": "*",
-    "gulp-util": "*"
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.11.5",
+    "babelify": "^10.0.0",
+    "bootstrap": "^4.6.0",
+    "browserify": "*",
+    "browserify-shim": "*",
+    "event-stream": "*",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-sass": "^5.0.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "sass": "^1.51.0",
+    "tinyify": "^3.0.0",
+    "vinyl-buffer": "*",
+    "vinyl-source-stream": "*"
   },
   "wporg": {
     "steps": [
