@@ -1,11 +1,11 @@
 {
   "name": "acf-polylang-sync",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Filling the gaps that Polylang leaves.",
   "main": "js/wp-robocrop.combined.min.js",
   "scripts": {
-      "dev": "gulp dev",
-      "dev-test": "./src/run/dev-test.sh"
+    "dev": "gulp dev",
+    "dev-test": "./src/run/dev-test.sh"
   },
   "repository": {
     "type": "git",
