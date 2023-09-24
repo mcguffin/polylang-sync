@@ -1,0 +1,9 @@
+{
+  "id": "https://github.com/mcguffin/acf-polylang-sync/raw/master/.wp-release-info.json",
+  "slug": "acf-polylang-sync",
+  "version": "0.0.17",
+  "url": "https://github.com/mcguffin/polylang-sync",
+  "package": "https://github.com/mcguffin/acf-polylang-sync/releases/download/0.0.17/acf-polylang-sync.zip",
+  "tested": "6.3",
+  "requires_php": "7.4"
+}

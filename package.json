@@ -1,6 +1,6 @@
 {
   "name": "acf-polylang-sync",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Filling the gaps that Polylang leaves.",
   "main": "main.js",
   "scripts": {
