@@ -7,7 +7,7 @@ Keep [ACF-Pro](https://www.advancedcustomfields.com) Fields in Sync on your
 [Polylang](http://polylang.wordpress.com)-Powered multilingual WordPress-Site.
 
  - Requires PHP 5.6+, [ACF 5+](https://www.advancedcustomfields.com/pro) and [Polylang](http://polylang.wordpress.com)
- - Developed and Tested With WP 4.7.2 - 4.9.8, Polylang 2.1 - 2.4, ACF Pro 5.5.5 - 5.7
+ - Developed and Tested With WP 4.7.2 - 6.3, Polylang 2.1 - 3.4, ACF Pro 5.5 - 6.2
 
 Development Status
 ------------------
@@ -36,13 +36,13 @@ Installation
  - Upload and activate it like any other WordPress plugin
  - AutoUpdate will run as long as the plugin is active
 
-### Production (using Github Updater – recommended for Multisite)
- - Install [Andy Fragen's GitHub Updater](https://github.com/afragen/github-updater) first.
- - In WP Admin go to Settings / GitHub Updater / Install Plugin. Enter `mcguffin/polylang-sync` as a Plugin-URI.
-
 ### Development
- - cd into your plugin directory
- - $ `git clone git@github.com:mcguffin/polylang-sync.git`
- - $ `cd acf-quick-edit-fields`
- - $ `npm install`
- - $ `gulp`
+
+In your plugin directory:
+
+```shell
+git clone git@github.com:mcguffin/polylang-sync.git
+cd polylang-sync
+npm install
+npm run dev
+```
