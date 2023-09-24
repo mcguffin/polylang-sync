@@ -47,25 +47,30 @@
     "vinyl-source-stream": "*"
   },
   "wporg": {
+    "type": "plugin",
     "steps": [
       "build",
-      "git"
+      "git",
+      "github"
     ],
-    "type": "plugin",
     "build": {
       "versionedFiles": null,
       "prebuild": [
-        "wp i18n make-pot . languages/polylang-sync.pot --domain=polylang-sync --exclude=tmp"
+        "wp i18n make-pot . languages/acf-wp-objects.pot --domain=acf-wp-objects --exclude=./tmp,./test",
+        "node ./src/run/acf-private.js 1"
       ],
-      "build": []
+      "build": [
+        "gulp build",
+        "npm run ver"
+      ]
     },
     "git": {
-      "host": "github.com",
-      "user": "mcguffin"
+      "user": "mcguffin",
+      "host": "github.com"
     },
     "wporg": {
-      "assets": ".wporg",
-      "svn_user": "podpirate"
+      "svn": "https://plugins.svn.wordpress.org/acf-wp-objects/",
+      "assets": ".wporg"
     }
   }
 }
