@@ -10,6 +10,9 @@ if ( ! defined('ABSPATH') ) {
 
 class Plugin extends Singleton {
 
+	/** @var string version */
+	private $_version = null;
+
 	private static $components = array(
 	);
 
@@ -74,8 +77,11 @@ class Plugin extends Singleton {
 	/**
 	 *	@return string current plugin version
 	 */
-	public function get_version() {
-		return $this->get_plugin_meta( 'Version' );
+	public function version() {
+		if ( is_null( $this->_version ) ) {
+			$this->_version = include_once $this->get_plugin_dir() . '/include/version.php';
+		}
+		return $this->_version;
 	}
 
 	/**
@@ -97,7 +103,7 @@ class Plugin extends Singleton {
 	 */
 	public function maybe_upgrade() {
 		// trigger upgrade
-		$new_version = $this->get_version();
+		$new_version = $this->version();
 		$old_version = get_site_option( 'poylang_sync_version' );
 
 		// call upgrade

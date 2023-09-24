@@ -2,21 +2,21 @@
   "name": "acf-polylang-sync",
   "version": "0.0.16",
   "description": "Filling the gaps that Polylang leaves.",
-  "main": "js/wp-robocrop.combined.min.js",
+  "main": "main.js",
   "scripts": {
     "dev": "gulp dev",
-    "dev-test": "./src/run/dev-test.sh"
+    "ver": "echo \"<?php return $(jq .version < ./package.json);\" > include/version.php"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mcguffin/acf-polylang-sync.git"
+    "url": "git+https://github.com/mcguffin/polylang-sync.git"
   },
   "author": "Jörn Lund",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mcguffin/acf-polylang-sync/issues"
+    "url": "https://github.com/mcguffin/polylang-sync/issues"
   },
-  "homepage": "https://github.com/mcguffin/acf-polylang-sync#readme",
+  "homepage": "https://github.com/mcguffin/polylang-sync#readme",
   "browserslist": [
     ">0.2%",
     "not dead",
@@ -56,8 +56,7 @@
     "build": {
       "versionedFiles": null,
       "prebuild": [
-        "wp i18n make-pot . languages/acf-wp-objects.pot --domain=acf-wp-objects --exclude=./tmp,./test",
-        "node ./src/run/acf-private.js 1"
+        "wp i18n make-pot . languages/polylang-sync.pot --domain=polylang-sync --exclude=./tmp,./test"
       ],
       "build": [
         "gulp build",
